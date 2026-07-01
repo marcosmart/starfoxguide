@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lylat Briefing Room | Star Fox (Switch 2) Score &amp; Challenge Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0f1e; --panel:#111a2e; --panel2:#0d1425; --line:#1e2b47;
+  --ink:#e9eef8; --dim:#94a1bd; --hud:#5fe0c8; --hud-dim:#2a5b57;
+  --amber:#f5b455; --rose:#f07a8e; --violet:#9f8fff; --green:#8fd987;
+  --radius:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;line-height:1.55;
+  background-image:radial-gradient(circle at 15% 10%, #12203c 0%, transparent 45%),radial-gradient(circle at 85% 90%, #131a33 0%, transparent 40%);}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+h1,h2,h3,.disp{font-family:'Chakra Petch',sans-serif;letter-spacing:.02em}
+.mono{font-family:'IBM Plex Mono',monospace}
+
+/* Header */
+header{padding:34px 0 18px;border-bottom:1px solid var(--line)}
+.eyebrow{color:var(--hud);font-family:'IBM Plex Mono',monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.28em;margin-bottom:10px}
+header h1{font-size:clamp(1.6rem,5.4vw,2.7rem);line-height:1.12;text-transform:uppercase}
+header h1 span{color:var(--hud)}
+.sub{color:var(--dim);margin-top:10px;max-width:640px;font-size:.95rem}
+.patch{display:inline-block;margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--amber);border:1px solid rgba(245,180,85,.35);padding:4px 10px;border-radius:4px}
+
+/* Nav */
+nav{position:sticky;top:0;z-index:50;background:rgba(10,15,30,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;background:none;border:1px solid var(--line);color:var(--dim);font-family:'Chakra Petch',sans-serif;
+  font-size:.82rem;text-transform:uppercase;letter-spacing:.08em;padding:9px 16px;border-radius:6px;cursor:pointer;transition:all .15s}
+.tab:hover{color:var(--ink);border-color:var(--hud-dim)}
+.tab.on{color:#08221e;background:var(--hud);border-color:var(--hud);font-weight:700}
+.tab:focus-visible{outline:2px solid var(--hud);outline-offset:2px}
+
+/* Sections */
+section{display:none;padding:26px 0 60px}
+section.on{display:block}
+.sec-title{font-size:1.25rem;text-transform:uppercase;color:var(--ink);margin-bottom:4px}
+.sec-note{color:var(--dim);font-size:.9rem;margin-bottom:22px;max-width:700px}
+
+/* Cards */
+.card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.card::before,.card::after{content:"";position:absolute;width:14px;height:14px;border-color:var(--hud);border-style:solid;opacity:.55}
+.card::before{top:-1px;left:-1px;border-width:2px 0 0 2px;border-radius:var(--radius) 0 0 0}
+.card::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0;border-radius:0 0 var(--radius) 0}
+.grid{display:grid;gap:14px}
+.grid.two{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.card h3{font-size:.95rem;text-transform:uppercase;color:var(--hud);margin-bottom:8px}
+.card p{color:var(--dim);font-size:.9rem}
+.card p b, .card li b{color:var(--ink);font-weight:600}
+.card ul{list-style:none;margin-top:6px}
+.card li{color:var(--dim);font-size:.9rem;padding:5px 0 5px 16px;position:relative}
+.card li::before{content:"▸";position:absolute;left:0;color:var(--hud);font-size:.75rem;top:8px}
+
+/* Route map */
+.mapbox{background:var(--panel2);border:1px solid var(--line);border-radius:var(--radius);padding:12px;margin-bottom:16px;overflow:hidden;position:relative}
+.mapbox svg{width:100%;height:auto;display:block}
+.route-btns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.rbtn{border:1px solid var(--line);background:var(--panel);color:var(--dim);font-family:'Chakra Petch',sans-serif;font-size:.78rem;
+  text-transform:uppercase;letter-spacing:.06em;padding:8px 14px;border-radius:6px;cursor:pointer;transition:all .15s}
+.rbtn:focus-visible{outline:2px solid var(--hud);outline-offset:2px}
+.rbtn .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:1px}
+.rbtn.on{color:var(--ink);border-color:currentColor}
+.edge{stroke:#233052;stroke-width:2;fill:none;transition:all .25s}
+.edge.hot{stroke-width:3.5;filter:drop-shadow(0 0 4px currentColor)}
+.node circle{fill:var(--panel);stroke:#3a4a72;stroke-width:1.5;transition:all .25s}
+.node.hot circle{stroke-width:2.5;filter:drop-shadow(0 0 5px currentColor)}
+.node text{fill:var(--dim);font-family:'IBM Plex Mono',monospace;font-size:10.5px;transition:fill .25s}
+.node.hot text{fill:var(--ink)}
+.route-detail{margin-top:2px}
+.rpath{font-family:'IBM Plex Mono',monospace;font-size:.82rem;color:var(--ink);margin:8px 0 10px;line-height:1.9}
+.rpath .arrow{color:var(--hud);margin:0 4px}
+
+/* Stage accordions */
+.stage{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);margin-bottom:10px;overflow:hidden}
+.stage-head{width:100%;display:flex;align-items:center;gap:12px;background:none;border:none;color:var(--ink);
+  padding:14px 16px;cursor:pointer;text-align:left;font-family:'Chakra Petch',sans-serif}
+.stage-head:focus-visible{outline:2px solid var(--hud);outline-offset:-2px}
+.stage-num{font-family:'IBM Plex Mono',monospace;color:var(--hud);font-size:.72rem;min-width:26px}
+.stage-name{font-size:1rem;text-transform:uppercase;flex:1}
+.veh{font-size:.66rem;color:var(--dim);border:1px solid var(--line);padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+.medal-chip{font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:var(--amber);white-space:nowrap}
+.chev{color:var(--dim);transition:transform .2s;font-size:.8rem}
+.stage.open .chev{transform:rotate(90deg)}
+.stage-body{display:none;padding:0 16px 18px;border-top:1px solid var(--line)}
+.stage.open .stage-body{display:block}
+.stage-body h4{font-family:'Chakra Petch',sans-serif;font-size:.74rem;text-transform:uppercase;letter-spacing:.14em;color:var(--hud);margin:16px 0 6px}
+.stage-body p{color:var(--dim);font-size:.9rem}
+.stage-body ul{list-style:none}
+.stage-body li{color:var(--dim);font-size:.9rem;padding:5px 0 5px 16px;position:relative}
+.stage-body li::before{content:"▸";position:absolute;left:0;color:var(--hud);font-size:.75rem;top:8px}
+.stage-body li b{color:var(--ink);font-weight:600}
+.exit{display:flex;gap:8px;align-items:baseline;padding:5px 0;font-size:.88rem;flex-wrap:wrap}
+.exit .to{font-family:'IBM Plex Mono',monospace;color:var(--ink);min-width:96px}
+.exit .cond{color:var(--dim)}
+.pace{font-family:'IBM Plex Mono',monospace;font-size:.8rem;color:var(--green);margin-top:4px}
+
+/* Challenges */
+.picker{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.pbtn{border:1px solid var(--line);background:var(--panel);color:var(--dim);font-family:'IBM Plex Mono',monospace;
+  font-size:.74rem;padding:7px 11px;border-radius:6px;cursor:pointer;transition:all .15s}
+.pbtn:hover{color:var(--ink)}
+.pbtn.on{background:var(--hud);color:#08221e;border-color:var(--hud);font-weight:600}
+.pbtn:focus-visible{outline:2px solid var(--hud);outline-offset:2px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:16px}
+.seg button{background:var(--panel);border:none;color:var(--dim);font-family:'Chakra Petch',sans-serif;text-transform:uppercase;
+  font-size:.8rem;letter-spacing:.06em;padding:10px 20px;cursor:pointer}
+.seg button.on.norm{background:var(--hud);color:#08221e;font-weight:700}
+.seg button.on.exp{background:var(--rose);color:#2b0d13;font-weight:700}
+.seg button:focus-visible{outline:2px solid var(--hud);outline-offset:-2px}
+.ch-title{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.ch-title h3{font-size:1.15rem;text-transform:uppercase}
+.ch-title .cnt{font-family:'IBM Plex Mono',monospace;color:var(--dim);font-size:.78rem}
+.chal{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--hud);border-radius:8px;padding:13px 15px;margin-bottom:9px}
+.chal.exp{border-left-color:var(--rose)}
+.chal .obj{font-weight:600;font-size:.92rem;color:var(--ink)}
+.chal .obj .idx{font-family:'IBM Plex Mono',monospace;color:var(--hud);font-size:.76rem;margin-right:8px}
+.chal.exp .obj .idx{color:var(--rose)}
+.chal .tip{color:var(--dim);font-size:.87rem;margin-top:5px}
+.chal .tip::before{content:"TACTIC — ";font-family:'IBM Plex Mono',monospace;font-size:.66rem;color:var(--hud);letter-spacing:.1em}
+.chal.exp .tip::before{color:var(--rose)}
+.lockednote{color:var(--dim);font-size:.83rem;margin:10px 0 16px;border:1px dashed var(--line);padding:10px 12px;border-radius:8px}
+
+footer{border-top:1px solid var(--line);padding:22px 0 40px;color:var(--dim);font-size:.78rem}
+footer .mono{color:var(--hud-dim)}
+
+@media (max-width:640px){
+  .stage-head{flex-wrap:wrap;row-gap:6px}
+  .stage-name{flex-basis:calc(100% - 70px)}
+  .medal-chip{font-size:.72rem}
+  .card{padding:15px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Cornerian Defence Force // Mission Intelligence</div>
+    <h1>Lylat <span>Briefing</span> Room</h1>
+    <p class="sub">Maximum-score strategies, best routes and full Challenge Mode tactics for Star Fox on Nintendo Switch 2 (2026). Every stage, every medal target, all 192 challenges.</p>
+    <span class="patch mono">DATA CURRENT AS OF 1 JULY 2026 · GAME v1.1.0</span>
+  </div>
+</header>
+
+<nav><div class="wrap"><div class="tabs" role="tablist">
+  <button class="tab on" data-sec="briefing" role="tab">Briefing</button>
+  <button class="tab" data-sec="routes" role="tab">Routes</button>
+  <button class="tab" data-sec="stages" role="tab">Stages &amp; Scoring</button>
+  <button class="tab" data-sec="challenges" role="tab">Challenges</button>
+</div></div></nav>
+
+<main class="wrap">
+
+<!-- BRIEFING -->
+<section id="briefing" class="on">
+  <h2 class="sec-title">Pilot Briefing: How Scoring Actually Works</h2>
+  <p class="sec-note">Medals require two things on every stage: reach the hit target, and finish with Peppy, Slippy and Falco all still flying. One downed wingmate voids the medal regardless of score. Medals are only available on Normal and Expert (never Easy), and only in Campaign Mode.</p>
+  <div class="grid two">
+    <div class="card"><h3>Charged shots are your score engine</h3>
+      <p>A lock-on charged shot that destroys several enemies at once pays bonus hits: two kills counts as <b>3 hits</b>, three kills as <b>6</b>, and it keeps scaling. The bonus flashes on screen as +1, +2, +3. <b>Bombs never earn this bonus</b>, so save them for enemies that would otherwise escape off screen.</p></div>
+    <div class="card"><h3>Spawn hidden enemies</h3>
+      <p>Flying through narrow gaps, crevices and arches triggers extra enemy groups that most players never see. These bonus spawns arrive clustered, which makes them perfect charged-shot fodder. This is how Corneria runs push past 220 hits when the medal only asks for 150.</p></div>
+    <div class="card"><h3>Steal your allies' kills</h3>
+      <p>Kills by Falco, Peppy and Slippy score you <b>nothing</b>. Watch what your wingmates chase and take it out first. This matters most on Katina, where Bill's squadron is extremely aggressive. But respond to every distress call instantly, because a downed ally voids the medal.</p></div>
+    <div class="card"><h3>Protect your laser upgrades</h3>
+      <p>Grab the green laser upgrades early and keep your wings intact so twin and hyper lasers carry into later stages. On Expert, <b>any collision breaks a wing instantly</b>, and a broken wing turns your next laser pickup into a wing repair instead of an upgrade.</p></div>
+    <div class="card"><h3>Checkpoint pacing</h3>
+      <p>Every stage has a checkpoint that roughly halves the enemy supply. If you are behind pace at the checkpoint, restart rather than grind a doomed run. <b>Retrying costs nothing on Normal</b>: restart from the pause menu or checkpoint as often as you like while medal hunting.</p></div>
+    <div class="card"><h3>Rapid fire on Pro Controller</h3>
+      <p>Map both rear paddles (GL and GR) to the fire button: hold Home, open the GL/GR Buttons config, and assign each to A. Three fingers cycling fire inputs dramatically raises your rate during dense waves on Area 6 and Zoness.</p></div>
+    <div class="card"><h3>Bomb refill trick</h3>
+      <p>Starting a hard stage with no bombs? Dying immediately at the start respawns you with three. Worth it on Venom 1. <b>Never do this on Expert</b>, where running out of lives is a hard game over for the whole run.</p></div>
+    <div class="card"><h3>Lock-on control</h3>
+      <p>Locked onto the wrong target when a juicy cluster appears? Hold <b>L + R together</b> to cancel the lock before firing, then re-charge over the group. Precision lock discipline is also how you avoid friendly-fire hits on challenges that forbid clipping teammates.</p></div>
+    <div class="card"><h3>Unlock chain</h3>
+      <p>All 15 Normal medals unlock <b>Expert difficulty</b> (plus James McCloud sunglasses for Fox). All 16 Expert medals, including Venom 2, unlock an alternate title screen, an extra multiplayer mode and 100% recognition. Challenge Mode completions feed Character Avatars, AR accessories and Battle Banner cosmetics.</p></div>
+  </div>
+</section>
+
+<!-- ROUTES -->
+<section id="routes">
+  <h2 class="sec-title">Lylat System Routes</h2>
+  <p class="sec-note">Sixteen stages exist but each run only visits seven, from Corneria to one of two Venom finales. Select a route to trace it on the star chart. Reaching Venom 2 via Area 6 is required for the true ending, and it also scores higher than Venom 1 because each Star Wolf takedown you claim yourself pays a fat bonus.</p>
+  <div class="route-btns" id="routeBtns"></div>
+  <div class="mapbox" id="mapbox"></div>
+  <div class="route-detail card" id="routeDetail"></div>
+  <h2 class="sec-title" style="margin-top:34px">Branch Unlock Conditions</h2>
+  <p class="sec-note">Each alternative path has a specific in-stage trigger. The map screen tracks which routes you have opened (press X on the planetarium screen).</p>
+  <div class="card"><ul id="branchList"></ul></div>
+</section>
+
+<!-- STAGES -->
+<section id="stages">
+  <h2 class="sec-title">All 16 Stages: Medal Targets &amp; Max-Score Strategy</h2>
+  <p class="sec-note">Hit targets are identical on Normal and Expert; only survival gets harder. Checkpoint pace figures tell you whether a run is worth continuing. Tap a stage to expand it.</p>
+  <div id="stageList"></div>
+</section>
+
+<!-- CHALLENGES -->
+<section id="challenges">
+  <h2 class="sec-title">Challenge Mode: All 192 Objectives</h2>
+  <p class="sec-note">Each stage has 6 Normal and 6 Expert challenges. Expert unlocks per stage once all six Normal tasks are done. Challenges only count in Challenge Mode (never the campaign) and medals cannot be earned here. The moment a challenge's checkbox appears you can quit and it saves, so run conflicting objectives separately and bail early. A greyed-out box means the requirement failed: restart immediately, because Challenge Mode has no checkpoints.</p>
+  <div class="picker" id="chPicker"></div>
+  <div class="seg" role="tablist">
+    <button id="segN" class="on norm" role="tab">Normal</button>
+    <button id="segE" class="exp" role="tab">Expert</button>
+  </div>
+  <div id="chBody"></div>
+</section>
+
+</main>
+
+<footer><div class="wrap">
+  <p>Fan-made strategy reference for Star Fox (Nintendo Switch 2, Velan Studios / Nintendo, released 25 June 2026). Compiled from post-launch community guides and testing current to 1 July 2026; verify exact figures in game, as patches may adjust values. Not affiliated with Nintendo.</p>
+  <p class="mono" style="margin-top:8px">// GOOD LUCK, AND DO A BARREL ROLL</p>
+</div></footer>
+
+<script>
+/* ===== ROUTE DATA ===== */
+const NODES = {
+  corneria:{x:62,y:300,label:"CORNERIA"}, meteo:{x:168,y:205,label:"METEO"}, sectory:{x:168,y:322,label:"SECTOR Y"},
+  fichina:{x:274,y:92,label:"FICHINA"}, katina:{x:274,y:210,label:"KATINA"}, aquas:{x:274,y:330,label:"AQUAS"},
+  sectorx:{x:380,y:92,label:"SECTOR X"}, solar:{x:380,y:212,label:"SOLAR"}, zoness:{x:380,y:332,label:"ZONESS"},
+  titania:{x:486,y:58,label:"TITANIA"}, sectorz:{x:486,y:196,label:"SECTOR Z"}, macbeth:{x:486,y:332,label:"MACBETH"},
+  bolse:{x:592,y:126,label:"BOLSE"}, area6:{x:592,y:290,label:"AREA 6"},
+  venom:{x:678,y:126,label:"VENOM"}, venom2:{x:678,y:290,label:"VENOM 2"}
+};
+const EDGES = [
+  ["corneria","meteo"],["corneria","sectory"],
+  ["meteo","fichina"],["meteo","katina"],
+  ["sectory","katina"],["sectory","aquas"],
+  ["fichina","sectorx"],["fichina","solar"],
+  ["katina","sectorx"],["katina","solar"],
+  ["aquas","zoness"],
+  ["sectorx","titania"],["sectorx","macbeth"],["sectorx","sectorz"],
+  ["solar","macbeth"],
+  ["zoness","macbeth"],["zoness","sectorz"],
+  ["titania","bolse"],
+  ["macbeth","bolse"],["macbeth","area6"],
+  ["sectorz","bolse"],["sectorz","area6"],
+  ["bolse","venom"],
+  ["area6","venom2"]
+];
+const ROUTES = [
+  {id:"beginner", name:"Beginner Route", color:"#8fd987",
+   path:["corneria","meteo","fichina","sectorx","titania","bolse","venom"],
+   blurb:"The natural low-resistance path along the bottom of the difficulty curve. Ideal for a first clear and for farming early medals, but it ends at Venom 1 and the standard ending. Note that entering Titania requires letting Spyborg down Slippy in Sector X.",
+   score:"Lower ceiling. Use it to learn systems, not to chase records."},
+  {id:"miyamoto", name:"Miyamoto's Route", color:"#9f8fff",
+   path:["corneria","sectory","katina","sectorx","sectorz","area6","venom2"],
+   blurb:"The route Shigeru Miyamoto himself highlighted for the original 64 game, and it still works here: Corneria's alternative exit into Sector Y, then Katina, warp through Sector X's four energy gates into Sector Z, defend the Great Fox, and storm Area 6 to Venom 2 for the true ending.",
+   score:"Balanced difficulty and score, and it opens Sector Z plus Area 6 on the map."},
+  {id:"classic", name:"Classic High-Score Route", color:"#f5b455",
+   path:["corneria","meteo","katina","sectorx","macbeth","area6","venom2"],
+   blurb:"The traditional score run: take Meteo's seven-anomaly warp straight to Katina, let the Saucerer timer expire to drop to Sector X, kill Spyborg fast for the Macbeth exit, derail the Forever Train for Area 6, and finish at Venom 2. Meteo, Macbeth and Area 6 are three of the richest hit farms in the game.",
+   score:"Excellent totals with well-understood, repeatable stages."},
+  {id:"water", name:"Water Route (Maximum Score)", color:"#5fe0c8",
+   path:["corneria","sectory","aquas","zoness","macbeth","area6","venom2"],
+   blurb:"The current best route for total score. Sector Y (100+ hits) opens Aquas, whose secret hit locations are enormously lucrative once learned, then Zoness (a 250-hit monster of a stage), Macbeth, Area 6 and Venom 2. Learned properly, this run approaches 3,000 points.",
+   score:"Highest known ceiling, close to 3,000 points on a clean run."}
+];
+const BRANCHES = [
+  ["Corneria → Sector Y","Rescue Falco from the fighters chasing him, fly through all seven stone arches in the waterfall section, then destroy the Attack Carrier boss."],
+  ["Meteo → Katina (warp)","Fly through all seven blue energy anomalies to trigger the wormhole shortcut."],
+  ["Sector Y → Aquas","Finish the mission with at least 100 hits."],
+  ["Katina → Solar","Destroy the Saucerer's core before the countdown ends. Let the timer expire instead if you want Sector X."],
+  ["Fichina → Solar","Defeat all of Star Wolf before the base's bomb timer runs out. Fail the timer and you exit to Sector X."],
+  ["Zoness → Sector Z","Destroy all 36 radar buoys without ever being spotted."],
+  ["Sector X → Macbeth","Defeat Spyborg before it knocks Slippy out of the sky."],
+  ["Sector X → Titania","Do the opposite: let Spyborg strike Slippy, who crash-lands on Titania, then choose to rescue him (Landmaster mission). The two outcomes are mutually exclusive per run."],
+  ["Sector X → Sector Z (warp)","Open and fly through all four energy gates for the wormhole shortcut."],
+  ["Sector Z → Area 6","Destroy all six Copperhead missiles before any damages the Great Fox."],
+  ["Macbeth → Area 6","Shoot all eight track switches along the route, then the final rail switch to derail the Forever Train."],
+  ["Area 6 → Venom 2","Simply clear Area 6. Venom 2 holds the true ending and the sixteenth medal."]
+];
+
+/* ===== STAGE DATA ===== */
+const STAGES = [
+ {id:"corneria",n:1,name:"Corneria",veh:"Arwing",medal:150,pace:"~70 hits at the checkpoint",
+  arrive:"Every run starts here.",
+  exits:[["Meteo","Default exit."],["Sector Y","Rescue Falco, thread all seven arches, beat the Attack Carrier."]],
+  strat:["Fly under the arches in the second water section to spawn bonus enemy groups, then charge shot the clusters.","Prioritise the large walking mechs and tight fighter wedges; they are the densest hit sources.","Section pacing on a max run: about 17 hits before the rock walls, ~100 before the City in Flames checkpoint, 165 before Falco's arches, 185 at the waterfall, 205 entering the bombardment. A good run exceeds 220.","Grab the first laser upgrade early and keep your wings clean so it carries forward all campaign."]},
+ {id:"meteo",n:2,name:"Meteo",veh:"Arwing",medal:200,pace:"~90 hits at the checkpoint",
+  arrive:"Default exit from Corneria.",
+  exits:[["Fichina","Default exit."],["Katina (warp)","Fly through all seven energy anomalies."]],
+  strat:["Asteroids count as hits: shoot rocks continuously between fighter waves.","The back half is where the score lives; the warp rings lead into an extremely dense field that can carry you most of the way to 200 alone.","Charge shot the mirrored butterfly-ship pairs by aiming between them.","If you take the warp for the Katina shortcut, keep firing inside the channel; the large asteroids there are nearly free hits."]},
+ {id:"sectory",n:3,name:"Sector Y",veh:"Arwing",medal:150,pace:"~50 hits at the checkpoint",
+  arrive:"Corneria's alternative exit.",
+  exits:[["Katina","Default exit."],["Aquas","Finish with 100+ hits."]],
+  strat:["Take the upper path at the fork for the better enemy supply.","Bomb the huge fighter formations (a good bomb catches ten or more) and charge shot everything else.","Brake beside every warship and strip its turrets and side panels; capital ships are quiet gold mines.","Hitting 100+ hits both banks the medal pace and opens the Aquas route for the maximum-score run."]},
+ {id:"aquas",n:4,name:"Aquas",veh:"Blue Marine",medal:150,pace:"~90 hits at the checkpoint",
+  arrive:"Sector Y with 100+ hits.",
+  exits:[["Zoness","Only exit."]],
+  strat:["Torpedo everything: the auto-lock does the aiming, so your job is keeping targets on screen and the fire button warm.","Destroy the cracked stone pillars and giant clams; both pay well and light the path.","Learn the secret hit pockets (coral beds, squid shoals, anglerfish dens); they are why this stage anchors the ~3,000-point water route.","Boss Bacoon: torpedo the starfish plugs, then hammer the exposed tongue."]},
+ {id:"katina",n:5,name:"Katina",veh:"Arwing (All-Range)",medal:150,pace:"Full 150 before the Saucerer's final countdown",
+  arrive:"Sector Y default, or Meteo's warp.",
+  exits:[["Sector X","Let the countdown expire (Saucerer survives)."],["Solar","Destroy the Saucerer's core in time."]],
+  strat:["Your allies are ruthless kill thieves here: intercept every fighter before Bill's squadron reaches it.","Charge shot the V-formations of Invaders as they converge.","All 150 hits are realistically available before the Saucerer's one-minute core countdown even begins if you stay ahead of your squad.","Decide your exit before the fight: core kill goes to Solar, timer expiry goes to Sector X for the score routes."]},
+ {id:"fichina",n:6,name:"Fichina",veh:"Arwing (All-Range)",medal:50,pace:"~30 hits before Star Wolf arrives",
+  arrive:"Meteo default.",
+  exits:[["Sector X","Bomb timer expires (Star Wolf not fully beaten)."],["Solar","Defeat all of Star Wolf before the timer ends."]],
+  strat:["Lowest target in the game, but hits are scarce: farm the grunt Invaders early.","Each fast Star Wolf takedown pays up to 10 bonus hits; four quick kills nearly closes the gap alone.","Somersault the instant a Wolfen locks on, then U-turn and counter-lock.","Do not let teammates finish Star Wolf members; those kills are yours."]},
+ {id:"zoness",n:7,name:"Zoness",veh:"Arwing",medal:250,pace:"~140 hits at the checkpoint",
+  arrive:"Aquas (only exit).",
+  exits:[["Macbeth","Default exit."],["Sector Z","Destroy all 36 radar buoys without being spotted."]],
+  strat:["The toughest medal outside Area 6. Shoot the searchlights throughout, but deliberately leave one alive near the gate after ROB's supply offer: being spotted there spawns a bonus enemy wave worth the whole medal margin.","Charged shots on the tight patrol-boat and shrimp clusters are essential; free fire will not reach 250.","Strip every cargo barge and buoy; nothing here is optional.","If you are route-running to Sector Z instead, the no-detection buoy clear conflicts with the bonus-wave trick, so pick one goal per run."]},
+ {id:"solar",n:8,name:"Solar",veh:"Arwing",medal:100,pace:"~40 hits at the checkpoint",
+  arrive:"Katina or Fichina success exits.",
+  exits:[["Macbeth","Only exit."]],
+  strat:["Enemy density is thin, so destroy literally every rock, Gore and lava creature.","Hold high altitude constantly; the heat drains your shield and the plasma waves punish low flying.","Ration supply rings across the stage rather than hoovering them early.","Boss Vulcain: bomb the arms off, then rapid fire the face between eruption cycles."]},
+ {id:"sectorx",n:9,name:"Sector X",veh:"Arwing",medal:150,pace:"~80 hits at the checkpoint",
+  arrive:"Katina or Fichina timer-expiry exits.",
+  exits:[["Macbeth","Kill Spyborg before it downs Slippy."],["Titania","Let Spyborg strike Slippy, then rescue him."],["Sector Z (warp)","Pass through all four energy gates."]],
+  strat:["Take the right path at the fork for the denser waves.","Charge shot the ambushes inside the wreckage field; the debris hides clustered spawns.","This is the game's route hub: decide between Macbeth (score), Titania (map completion) or the Sector Z warp before the boss.","Spyborg fast kill: bomb both fists at the start, then burst the head before its swat animation."]},
+ {id:"sectorz",n:10,name:"Sector Z",veh:"Arwing (All-Range)",medal:100,pace:"25 before missile 1, 40 before the pair, 70 before the final wave",
+  arrive:"Sector X warp, or Zoness undetected.",
+  exits:[["Bolse","Any missile damages the Great Fox."],["Area 6","Destroy all six Copperhead missiles in time."]],
+  strat:["Enemy supply is very low, so extract every possible hit from the escort fighters between missile alerts.","Track pace against the missile waves rather than the clock.","You must land the killing blow on each Copperhead yourself for full credit; allies softening them is fine.","All six missiles stopped opens Area 6 and the true-ending path."]},
+ {id:"macbeth",n:11,name:"Macbeth",veh:"Landmaster",medal:150,pace:"~100 hits at the checkpoint",
+  arrive:"Solar, Zoness default, or Sector X fast boss kill.",
+  exits:[["Bolse","Default exit."],["Area 6","All eight switches plus the final rail switch (train derailed)."]],
+  strat:["The whole stage is a shooting gallery: rake train cars, boulders, towers and every airborne bomber.","Hover boost to the raised ledges for the gold rings without losing firing time.","Shoot the eight track switches as you pass, then the final switcher; the derailment pays a bonus and opens Area 6.","Against Mechbeth, hover sideways the instant its crane tail dips, or it lifts and drops you."]},
+ {id:"titania",n:12,name:"Titania",veh:"Landmaster",medal:150,pace:"~70 hits at the checkpoint",
+  arrive:"Sector X only, by letting Spyborg down Slippy.",
+  exits:[["Bolse","Only exit."]],
+  strat:["The one stage where Slippy being shot down is required, so the medal only needs Peppy and Falco alive.","Destroy every enemy, especially the four-legged Desert Crawlers; bomb them if pressed.","Hover over the flashing buried mines rather than steering around them.","Boss Goras: shoot the arm joints, and hold fire whenever Slippy dangles near a claw."]},
+ {id:"area6",n:13,name:"Area 6",veh:"Arwing",medal:300,pace:"~175 hits at the checkpoint",
+  arrive:"Macbeth derailment or Sector Z missile defence.",
+  exits:[["Venom 2","Only exit; leads to the true ending."]],
+  strat:["The hardest medal in the game. Enter with full bombs and never stop firing from the first frame.","Target the spinning defence stations, fighter wedges and warships simultaneously; the paddle rapid-fire mapping earns its keep here.","Memorise spawn timing cold: 300 requires near-perfect coverage of both halves.","Boss Gorgon: bomb one arm, charge shot the rest, and boost diagonally when its eye flares for the beam."]},
+ {id:"bolse",n:14,name:"Bolse",veh:"Arwing (All-Range)",medal:150,pace:"40 to 70 hits before the core opens",
+  arrive:"Titania, Macbeth default, or Sector Z default.",
+  exits:[["Venom","Only exit; standard ending path."]],
+  strat:["Fighters respawn while the perimeter towers stand: farm the swarm before finishing the towers.","The exposed core is worth roughly 80 hits if cleared quickly.","If Star Wolf crashes the fight, fast takedowns add up to 40 more; take all four yourself.","Climb over the satellite's spokes rather than threading them, especially on Expert."]},
+ {id:"venom",n:15,name:"Venom",veh:"Arwing",medal:200,pace:"~180 hits before the final tunnel",
+  arrive:"Bolse.",
+  exits:[["Ending","Standard ending (Andross robot)."]],
+  strat:["Arriving via Bolse, nearly all 200 hits must come from the canyon and tunnel, because Andross himself pays nothing.","Bomb the opening 30-fighter wedge dead centre, then strip the canyon tanks and turrets.","The Golemech mini-boss yields about 10 hits on a fast kill.","Against Andross, charge shot the hands, then the eyes when the face exposes; feed bombs into his inhale."]},
+ {id:"venom2",n:16,name:"Venom 2",veh:"Arwing (All-Range + tunnel)",medal:200,pace:"~180 from Star Wolf before the tunnel",
+  arrive:"Area 6 only.",
+  exits:[["True Ending","Defeat Andross's true form and escape with James."]],
+  strat:["Star Wolf's upgraded Wolfen II squadron is the score: each fast takedown pays 50 bonus hits, so you need at least three of the four bonuses (a slow fourth still adds ~30).","Andross's true form tops it up: each floating eye downed quickly gives 6 hits, and the final kill adds 11.","Grab the 1-Up in the tunnel alcove on the approach.","In the escape, follow James's exact line through the collapsing tunnel."]}
+];
+
+/* ===== CHALLENGE DATA (192 objectives) ===== */
+const CH = {
+corneria:{normal:[
+ ["Defeat 3 or more enemies with a single charged shot","Charge a lock over the first tight fighter wedge past the beach and release as the group converges on your reticle."],
+ ["Complete Falco's challenge","Keep Falco healthy early, then follow him through all seven stone arches in the waterfall section."],
+ ["Defeat all 6 Garuda robots","The bipedal Garudas patrol the city streets; sweep both flanks early, as two hide behind buildings off the main line."],
+ ["Defeat all 4 Ski Bots","They race across the lake stretch; brake slightly and pick them off before they peel away out of range."],
+ ["Complete the mission in 3 minutes or fewer","Boost every quiet stretch, skip optional fights and go straight at the boss weak points."],
+ ["Destroy every vulnerable part of the Granga","Shoot both legs and both shoulder launchers before finishing the exposed core, or the tick will not register."]],
+expert:[
+ ["Score 100 hits before taking damage","Open with charged shots only and stay above the rooftops where stray ground fire cannot reach you."],
+ ["Complete Falco's challenge before Falco does","Boost ahead once the arches begin and thread every ring first; he takes a lazy line, so a clean boost wins."],
+ ["Prevent all buildings from being pushed over","Kill the giant city robots the moment they appear, before their shove animation starts; bomb the pair near the checkpoint."],
+ ["Destroy all Cornerian satellite dishes","The dishes sit on rooftops and towers; strafe wide so the distant ones stay on screen long enough to hit."],
+ ["Defeat the Attack Carrier within 30 seconds","Save two bombs, hit each side hatch the instant it opens, then unload rapid fire into the exposed bay."],
+ ["Defeat the Granga within 10 seconds","Arrive with hyper lasers and a bomb in hand: bomb the chest immediately, then dump charged shots without pause."]]},
+meteo:{normal:[
+ ["Score 180 hits","Asteroids count: shoot rocks between waves and charge shot every fighter cluster; the dense back half closes the gap."],
+ ["Fly through all 7 energy anomalies","The blue rings alternate high and low after mid-stage; centre each one and boost between them. This also opens the Katina warp."],
+ ["Destroy 8 asteroids before the first large tunnel asteroid","Open fire from the very first frame; small rocks count, so spray the field."],
+ ["Defeat all 3 snakelike Moras","The serpents coil around large asteroids; lock the head and release your charge as the body straightens."],
+ ["Defeat 5 Flip Bots","Flip Bots somersault at close range; brake and shoot them while they are still on approach."],
+ ["Defeat the Meteo Crusher using hyper lasers","Protect both wings the whole stage so your upgrades survive to the boss, then finish it with the hyper beam."]],
+expert:[
+ ["Defeat 30 enemies with charged shots","Lock, release, repeat and never free fire; take stragglers so every charge banks a kill."],
+ ["Destroy 100 large asteroids in the warp channel","Take the warp, hold fire and sweep the reticle in slow circles across the rock walls; the channel supplies plenty."],
+ ["Complete the mission without breaking a wing","Fly the open lanes and barrel roll deflections rather than dodging into rocks; any collision snaps a wing on Expert."],
+ ["Defeat 20 butterfly-like Attacker II enemies","They swoop in mirrored pairs; aim your charge between each pair to catch both."],
+ ["Defeat the Meteo Crusher's first phase without hitting its absorption shield","Hold fire while the barrier is up and only shoot in the window after it fires its ring volley."],
+ ["Defeat 30 Web Ships as they deploy their lasers","Shoot the ships, not the beams: hit each one as it deploys, before the web thickens into a wall."]]},
+sectory:{normal:[
+ ["Find and defeat the lone red Shogun Trooper","Take the lower lane at the fork and lock the red robot darting through the debris; fully charged blasts guarantee the kill."],
+ ["Destroy 12 panels on the sides of enemy ships","Brake alongside each warship and shoot the black-and-red plates on its flanks; not every ship carries them, so check each hull."],
+ ["Fully upgrade your shields and lasers","Collect every gold ring and laser upgrade before rejoining your teammates after the split, or the challenge fails on reunion."],
+ ["Score 100 hits","Bomb the big fighter wedges and charge shot the rest; the same run banks the Aquas route."],
+ ["Defeat 10 or more enemies with a single bomb","Hold your bomb for the tight missile or fighter swarm just before the fork and detonate it centre mass."],
+ ["Form a four-ship formation with your teammates to uncover the hidden item","Stay level and close with all three wingmates after the split until the hidden power-up reveals itself."]],
+expert:[
+ ["Score 150 hits without hitting a teammate","Locked charge shots only whenever allies are near; keep free fire for empty sky."],
+ ["Destroy 30 warship turrets","Brake at every capital ship and strip its guns methodically before passing; rushing leaves turrets behind."],
+ ["Defeat 14 Shogun Troopers","Take the lower path for the extra Troopers and finish each with a close-range charged shot; they soak plain lasers."],
+ ["Defeat both Shogun Warriors within 15 seconds of appearing","Save two bombs: hit each Warrior with a bomb plus rapid fire the instant it warps in."],
+ ["Destroy 12 missiles","One bomb thrown into the middle of the incoming volley before the split clears the full dozen at once."],
+ ["Defeat the Shogun Warlord using only charged shots","Circle wide, charge while it teleports and release into the chest core; a single stray tap voids the run."]]},
+aquas:{normal:[
+ ["Destroy all 14 Giant Aquas Clams","Torpedo each clam only while it yawns open; the shut shell blocks everything."],
+ ["Pass through 3 jellyfish trios without taking damage","Cut speed and thread the centre gap; their stingers sweep outwards, so the middle is safest."],
+ ["Destroy 20 pieces of pink branching coral","Spray fire low along the seabed; the coral shatters in a hit or two."],
+ ["Shoot down 5 stone pillars","Torpedo the cracked pillars before the arches; they collapse in one lock."],
+ ["Pass through all 5 stone arches","Line up early and take the centre; brake if the current pushes you wide."],
+ ["Score 125 hits","Fire torpedoes constantly: the auto-lock aims, so your only job is keeping targets on screen."]],
+expert:[
+ ["Reach Bacoon without firing lasers or torpedoes","A pure evasion run and one of the hardest tasks in the game. Memorise hazard timing, hug the upper water and weave; movement is your only tool."],
+ ["Score 100 hits before taking damage","Stay high where fewer projectiles reach and let locked torpedoes clear the lane ahead of you."],
+ ["Defeat Bacoon within 70 seconds","Torpedo the starfish plugs the instant they show, then hammer the exposed tongue with everything you have."],
+ ["Destroy all 21 Spindle Shells","They spiral upwards firing needles, then sink fast; lock torpedoes early on each one."],
+ ["Defeat all 25 Luminous Squid","The glowing squid drift in packs near the trench; sweep locks across the whole shoal."],
+ ["Defeat all 4 Giant Anglerfish","Each lurks in a dark pocket; watch for the lure light and put the torpedo just behind it."]]},
+katina:{normal:[
+ ["Collect 3 gold rings","The rings spawn above the base towers; climb between waves to sweep them."],
+ ["Score 120 hits","Intercept every fighter before Bill's squadron reaches it; ally kills score nothing."],
+ ["Shoot down a teammate's target 3 times","When a wingmate calls for help, snap to the marker and steal the chasing fighter; three rescues completes it."],
+ ["Defeat 3 or more enemies with a single charged shot","The Invaders fly in V-formations; lock the centre ship and release as the wings close in."],
+ ["Destroy all hatches on the Saucerer","Break each hatch as it opens around the rim before the core reveal."],
+ ["Shoot down fewer than 3 allies before completing the mission","Friendly craft mix into every furball; use locked shots and check your line before firing."]],
+expert:[
+ ["Defeat all Invader II enemies before the Saucerer deploys reinforcements","Play the opening waves at full aggression; your deadline is the mothership's hatches opening."],
+ ["Defeat 5 or more enemies with a single bomb","Bomb the dense fighter ring circling the Saucerer."],
+ ["Score 160 hits without hitting any allies","Locked charge shots only; free firing into this dogfight will inevitably clip a friendly Husky or Bulldog."],
+ ["Complete the mission without breaking a wing","Collisions come from the ground and the Saucerer's rim in All-Range Mode; keep altitude and turn wide."],
+ ["Destroy the Saucerer's core weapon before the timer reaches 50","Break all the hatches early so the core exposes with time in hand, then bomb it immediately."],
+ ["Defeat 10 Invader II enemies within the first 20 seconds","Boost head-on into the first wave, charge shot the pairs and never chase; let the targets come to you."]]},
+fichina:{normal:[
+ ["Defeat all 4 members of the Star Wolf team","Somersault when tailed, U-turn and counter-lock each Wolfen; do not let teammates take any of the four kills."],
+ ["Perform a somersault to evade a pursuing Star Wolf member","Wait for the lock-on alarm, pull a somersault and the box ticks instantly."],
+ ["Destroy all 8 radar stations","The dishes ring the base perimeter; fly low circuits between dogfights and strafe them down."],
+ ["Destroy all 26 antennae","The small masts dot the snowfield; sweep them early before Star Wolf spawns and the fight demands your attention."],
+ ["Shoot down a teammate's target 3 times","Answer every distress call at once; three rescues completes the task."],
+ ["Clear the map of Invader I enemies before completing the mission","Sweep the grunt fighters off the radar before you finish the base objective."]],
+expert:[
+ ["Complete the mission without any teammates being downed","Break off any duel to answer distress calls; Star Wolf shreds allies alarmingly fast on Expert."],
+ ["Save the base without damaging a wing","Turn in wide arcs away from the base towers; tight reversals near structures are what break wings here."],
+ ["Defeat all 4 Star Wolf members without a somersault or U-turn","Fly wide horizontal circles and cut inside their turns instead of reversing; patience beats panic manoeuvres."],
+ ["Score 60 hits","Grunt fighters respawn steadily; farm them before you finish off Star Wolf."],
+ ["Defeat any Star Wolf member within 30 seconds of appearing","Rush Andrew, the weakest pilot, straight off spawn: boost, lock, and finish with a bomb."],
+ ["Defeat any Star Wolf member with a bomb","Lead a Wolfen into a straight chase and lob the bomb slightly ahead of its nose."]]},
+zoness:{normal:[
+ ["Hit the Sarumarine's periscope every time it appears","It surfaces on a rhythm; park your reticle where it last rose and fire on the bob."],
+ ["Destroy all cargo containers","The barges carry stacked crates; brake and strip each stack completely as you pass."],
+ ["Destroy every Radar Buoy without being spotted","Take all 36 buoys with long-range shots before their beams touch you; this is also the Sector Z route condition."],
+ ["Collect 2 supply rings and 1 bomb with a single somersault before the Sarumarine","A vertical stack of pickups sits shortly before the boss; somersault straight up through the column."],
+ ["Follow Slippy and reveal a hidden power-up","When Slippy peels off, mirror his line and shoot where he indicates to expose the item."],
+ ["Defeat all 3 crab-like Kani","The beasts rise from the toxic sea; shoot the eyes while the claws are open."]],
+expert:[
+ ["Fly under 3 waterwheel gates without taking damage","Cut speed, line up the lowest gap and commit as the spokes clear; hesitation mid-wheel is what clips you."],
+ ["Somersault under a Todora sea dragon 2 times","Bait the dragon's arc, then somersault beneath its belly; repeat on its second pass."],
+ ["Score 270 hits","Leave one searchlight near the supply gate alive on purpose: being spotted there spawns the bonus wave you need. Charge shot every cluster."],
+ ["Destroy all Radar Buoys with locked charge shots, without being spotted","Lock each buoy at maximum range and never free fire; a single beam touch or stray laser voids it."],
+ ["Defeat 30 Patrol Boats","The boats hug the waterline; fly low and rake them with sustained fire."],
+ ["Defeat 10 Z-Shrimp","The shrimp skim the surface in schools early; drop low from the start because they stop spawning late."]]},
+solar:{normal:[
+ ["Score 80 hits","Density is thin, so destroy every rock, bird and lava creature without exception."],
+ ["Avoid damage from Solar's plasma surface, including waves","Hold maximum altitude the whole stage and climb before each wave crest, not during it."],
+ ["Destroy 25 enemies and rocks with bombs","Lob bombs into rock clusters and Gore flocks; splash kills all count."],
+ ["Never fully deplete your shield gauge","The heat drains you constantly; ration supply rings evenly across the run instead of collecting early."],
+ ["Collect 40 supply rings","The rings float in arcs above the surface; sacrifice a little scoring to sweep every arc."],
+ ["Dispel 5 waves using bombs before reaching Vulcain","Bomb each rising plasma swell head-on; the blast flattens the crest."]],
+expert:[
+ ["Destroy 40 rocks with noncharged laser fire","Tap fire every drifting boulder; charged shots do not count towards this one."],
+ ["Collect 6 bombs","Bomb pickups hide inside rock formations; shoot the rocks open along the route."],
+ ["Defeat Vulcain in 55 seconds","Bomb the arms off immediately, then rapid fire the face between eruption cycles."],
+ ["Reach Vulcain collecting no rings unless your shield is red","Fly clean and hot: only dip for a supply ring once the gauge has actually turned red."],
+ ["Defeat 25 flying Gores","The lava birds launch in flocks from the surface; charge shot each group as it rises."],
+ ["Defeat Vulcain without getting hit","Hold the top of the screen, drop only to fire, and barrel roll through its rock spray."]]},
+sectorx:{normal:[
+ ["Defeat Spyborg using hyper lasers","Keep both wings intact all stage so the hyper upgrade survives to the boss."],
+ ["Find the hidden wormhole","Open and fly through all four energy gates on the left branch; the warp to Sector Z reveals at the end."],
+ ["Score 120 hits","Take the right path at the fork for denser waves and charge shot the ambushes inside the wreckage."],
+ ["Collect 5 gold rings","The rings hide among the shattered station segments; weave the debris to sweep them."],
+ ["Destroy 10 Proximity Mines with a single bomb","The mid-stage minefield clusters tightly; detonate one bomb in its heart."],
+ ["Destroy 20 SX Lasers","The laser drones guard the corridor; brake and strip each battery before it cycles its beam."]],
+expert:[
+ ["Find the hidden power-up in the secret corridor","Inside the warp corridor, shoot the marked wall panel to expose the pickup."],
+ ["Defeat Spyborg before Slippy is downed","Bomb both fists off at the start, then burst the head before it winds up its swat at Slippy."],
+ ["Fly the left path in 60 seconds without breaking a wing","Boost the straights, brake only at the two rotating girders and never trade paint with the walls."],
+ ["Complete the mission without taking any damage","Take the calmer left fork, roll through every volley and finish Spyborg from range. Run this separately from the wormhole task; the routes conflict."],
+ ["Destroy 15 floating Spy Eyes","The eyes cloak briefly; watch for the shimmer and pre-fire their reveal points."],
+ ["Defeat 30 shups in the wormhole","Inside the warp channel, hold fire down the centre; the small craft funnel straight into your stream."]]},
+sectorz:{normal:[
+ ["Land the final shot on all 6 Copperhead Missiles","Let allies soften each missile but make sure your laser lands the killing blow every time."],
+ ["Defeat 15 Invader III enemies","Clear the escort fighters orbiting the Great Fox between missile alerts."],
+ ["Destroy 5 salvage crates","The drifting containers pop with a single burst each; sweep them early."],
+ ["Collect 15 supply rings","Rings scatter through the debris field; collect between alerts, not during an intercept."],
+ ["Fly into the Great Fox's repair bay while your shield is critical","Take hits until the gauge flashes red, then land in the hangar to trigger the tick."],
+ ["Defeat an enemy while performing a somersault","Lock a fighter, somersault, and release the shot at the top of the loop."]],
+expert:[
+ ["Defeat 7 Invader III enemies within a 10-second span","Save a bomb for the densest fighter wave and mop the survivors with charge shots."],
+ ["Destroy a Copperhead Missile within 200 sm of the Great Fox","Deliberately shadow one missile late and burst it at the last safe moment; nerve-racking but simple."],
+ ["Destroy all 12 salvage crates before ROB64 first detects a missile","Boost the crate line the second the mission opens; ignore everything else until the twelfth pops."],
+ ["Defend the Great Fox without taking any damage","Kill missiles at maximum range and never dogfight inside the flak envelope around the ship."],
+ ["Destroy all 6 Copperheads before they reach 1000 sm of the Great Fox","Intercept each launch instantly: boost head-on, bomb, and finish with lasers."],
+ ["Clear the map of all enemies, including Copperhead Missiles","Hunt every straggler between waves; ROB confirms when the sector is finally empty."]]},
+macbeth:{normal:[
+ ["Use the rail switch to divert the Forever Train","Shoot all eight track switches along the run, then the final switcher to send the train into the depot. Same trigger as the Area 6 route."],
+ ["Defeat 25 airborne enemies","Elevate the Landmaster's cannon and lead the bombers crossing overhead."],
+ ["Score 120 hits","Rake train cars, boulders and towers continuously; the whole stage is a shooting gallery."],
+ ["Collect 5 gold rings","The rings sit on raised ledges; hover boost up to them without stopping your fire."],
+ ["Defeat Mechbeth without being lifted by its tail","When the crane tail dips, hover sideways immediately; never sit still beneath it."],
+ ["Save your teammates from pursuit 5 times","Lock each chaser the instant the distress marker appears; five rescues completes it."]],
+expert:[
+ ["Pass through 10 gateways without being hit by the sliding doors","Centre the Landmaster before each gate and commit; hesitating in the frame is what clips you."],
+ ["Knock down all 13 barricade walls","Crack the barricades from distance with charged shots before you reach them."],
+ ["Destroy 12 Forever Train cars","Focus fire on each car's coupling as the train runs parallel to you."],
+ ["Destroy 15 defence towers","The towers flank the track on both sides; hover-strafe to keep both flanks in view."],
+ ["Destroy all 38 boulders","Nothing at the roadside survives: rake every rock formation as you roll."],
+ ["Defeat Mechbeth before distance marker 300","Skip the rail gimmick entirely and burn the boss down directly with charged shots from first contact."]]},
+titania:{normal:[
+ ["Score 120 hits","Roll forward shooting everything; the desert hides spawners behind the dunes."],
+ ["Reach the Goras without touching any land mines","The buried mines flash before popping; hover across the flat minefields rather than steering between them."],
+ ["Defeat 20 airborne enemies using noncharged laser fire","Tap fire the bombers only; a charged kill does not count."],
+ ["Defeat the Goras without shooting Slippy","Hold fire whenever Slippy dangles near a claw and hit the exposed arm joints instead."],
+ ["Collect all 8 gold rings","Several rings crown the rock arches; hover boost early or you pass beneath them."],
+ ["Destroy all 3 Laser Turrets","The fixed turrets guard the canyon narrows; snipe each one before entering its firing arc."]],
+expert:[
+ ["Use hover to evade the Goras's tail swipe","When it rears and twists, hover the instant the tail glows; the sweep passes underneath you."],
+ ["Avoid colliding with any stone pillars","The stone forest demands slow, deliberate lines; brake and thread the gaps one at a time."],
+ ["Destroy 60 Spiny Cacti","Every cactus counts; weave the dune fields shooting low and wide."],
+ ["Defeat 40 enemies using bombs","Bomb crates restock along the route; lob one into every enemy column you meet."],
+ ["Defeat all 5 Desert Crawlers with noncharged laser fire","Sustained tap fire on the leg joints brings the big walkers down; no charges allowed."],
+ ["Destroy 8 Jumping Bombs","The hoppers leap at your hull; shoot each at the top of its arc."]]},
+area6:{normal:[
+ ["Destroy 50 Proximity Mines","Rake the minefields with constant fire; every pop counts."],
+ ["Destroy the initial barrage of 5 Ninjin Missiles","The opening volley comes straight down your throat; charge shot the centre and laser the flanks."],
+ ["Destroy all 3 arms before the Gorgon phases out","Bomb one arm and charge shot the others; you get one clean window per cycle."],
+ ["Reach the Gorgon with fully upgraded shields and lasers","Guard your wings the whole gauntlet; density here makes upgrades everything."],
+ ["Take down a Zeram-Class Cruiser with a bomb","Lob a bomb into the capital ship's bridge as it broadsides you."],
+ ["Complete the mission without any teammates being downed","Answer every distress call instantly; this gauntlet eats wingmates."]],
+expert:[
+ ["Take down 5 Zeram-Class Cruisers","Bomb the first, then strip the rest with hyper lasers along the reactor line."],
+ ["Successfully dodge the Gorgon's laser attack","When the eye flares, boost diagonally; rolling alone does not clear the beam's width."],
+ ["Score 320 hits","Never stop firing from frame one. Map the Pro Controller paddles to fire and charge shot every wedge; this is the count that breaks most pilots."],
+ ["Reach the Gorgon without collecting any supply rings or power-ups","A pure discipline run: fly as though every ring were a mine."],
+ ["Destroy 2 Ninjin Missiles with charged shots","Lock the incoming missiles early; the homing charge catches them mid-flight."],
+ ["Destroy the first 12 Umbra-Class Defense Stations","The spinning stations open briefly; pre-charge and release into each core on the reveal."]]},
+bolse:{normal:[
+ ["Score 130 hits","Farm the fighter swarms while the perimeter towers still stand; they respawn until the core opens."],
+ ["Complete the mission without any teammates being downed","If Star Wolf crashes the fight, peel them off your allies immediately."],
+ ["Collect 3 gold rings","The rings orbit the station perimeter; circle wide between tower runs."],
+ ["Defeat 5 Bolse Fighters with noncharged laser fire","Tap fire the drones; simple, but a charged kill voids the count."],
+ ["Defeat all 4 members of the Star Wolf team","If they arrive, take all four yourself before touching the core."],
+ ["Complete the mission in 4 minutes or fewer","Towers, then pylons, then core; no sightseeing."]],
+expert:[
+ ["Complete the mission without destroying any laser cannons","Weave the turret fire without silencing it; kill only towers and core parts."],
+ ["Destroy the Bolse Core within 60 seconds of its appearance","Save every bomb for the reveal and unload alongside hyper lasers."],
+ ["Complete the mission without breaking a wing","The satellite's spokes are the wing-breaker; climb over them rather than threading through."],
+ ["Score 190 hits","Extend the fighter farm for as long as your nerves allow before exposing the core."],
+ ["Avoid all of the Bolse Core's lasers","Orbit against the beams' rotation and keep your distance from the hub."],
+ ["Destroy all 6 energy towers within the first 80 seconds","Boost tower to tower in one clean circuit, charge shotting each tip."]]},
+venom:{normal:[
+ ["Defeat all 30 first-wave fighters with a single bomb","The opening swarm flies a tight wedge; lob the bomb dead centre as they mass."],
+ ["Exit the canyon with fully upgraded shields and lasers","Sweep the canyon rings and guard your wings; nothing else matters until the temple."],
+ ["Defeat the Golemech without taking damage from tunnel hazards","Hug the tunnel's centre line and roll through the falling debris."],
+ ["Disable all lasers in the tunnel leading to Andross","Shoot each emitter as the corridor bends; brake at the junctions to buy aiming time."],
+ ["Make Andross inhale 3 bombs","Each time he breathes in, feed a bomb into the vacuum; repeat over three cycles."],
+ ["Defeat Andross within 70 seconds","Charged shots on the hands, then hammer the eyes the instant the face exposes."]],
+expert:[
+ ["Defeat 40 Venom Tanks","The tanks line the canyon floor; strafe low with sustained fire the whole approach."],
+ ["Reach the temple without breaking a wing","The canyon narrows on Expert; brake early into every turn rather than trusting the boost."],
+ ["Score 100 hits in the canyon without hitting a teammate","Locked charge shots only inside the tight walls; your allies weave dangerously close here."],
+ ["Defeat the Golemech within 45 seconds","Bomb its chest on the reveal, then rapid fire the core; ignore the limbs completely."],
+ ["Destroy one of Andross's hands with a charged shot","Lock one slapping hand and release the charge as it lunges."],
+ ["Destroy 10 salvage crates with a single bomb during the Andross fight","He conjures a crate cluster mid-fight; hold one bomb for exactly that moment."]]},
+venom2:{normal:[
+ ["Defeat Pigma first","Ignore the others' bait; lock Pigma's Wolfen II from the opening pass and stay glued to him."],
+ ["Defeat all 4 Star Wolf members without any teammates being downed","Every rescue call outranks your current duel; break off, save the ally, resume."],
+ ["Collect all four supply rings dropped by downed Wolfen II fighters","Each kill leaves a ring behind; swing back for it before starting the next duel."],
+ ["Collect a 1-Up in the tunnel leading to Andross","The extra life sits in a side alcove on the approach; hug the wall to spot it."],
+ ["Destroy both of Andross's floating eyeballs using bombs","When the eyes detach and orbit, lead each slightly and bomb it."],
+ ["Defeat Andross's true form without being caught by his tendrils","Keep moving laterally; the tendrils lunge at where you were, not where you are."]],
+expert:[
+ ["Defeat any Star Wolf member within 35 seconds of appearing","Rush Andrew or Pigma straight off spawn: boost, lock, bomb."],
+ ["Defeat all 4 Star Wolf members without breaking a wing","Never joust head-on; their Wolfen II clip wings on crossing passes, so fight from the flank."],
+ ["Destroy both eyeballs within 30 seconds of the transformation","Pre-position centre screen and bomb both eyes the instant they split off."],
+ ["Defeat Andross without taking damage","Learn the brain's attack rhythm: fire only in the safe windows and roll everything else on principle."],
+ ["Defeat Andross's true form without causing him to teleport","Sustained pressure on the brain's cortex prevents the warp; never let the damage lapse."],
+ ["Complete the final escape sequence without taking damage","Follow James exactly; his line through the collapsing tunnel is the safe line."]]}
+};
+
+/* ===== TAB NAV ===== */
+const tabs=document.querySelectorAll('.tab');
+tabs.forEach(t=>t.addEventListener('click',()=>{
+  tabs.forEach(x=>x.classList.remove('on'));t.classList.add('on');
+  document.querySelectorAll('main section').forEach(s=>s.classList.remove('on'));
+  document.getElementById(t.dataset.sec).classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}));
+
+/* ===== ROUTE MAP ===== */
+function edgeKey(a,b){return a+"|"+b}
+function buildMap(){
+  let svg='<svg viewBox="0 0 740 380" role="img" aria-label="Lylat System route map">';
+  EDGES.forEach(([a,b])=>{
+    const A=NODES[a],B=NODES[b];
+    const mx=(A.x+B.x)/2;
+    svg+=`<path class="edge" data-e="${edgeKey(a,b)}" d="M${A.x} ${A.y} C ${mx} ${A.y}, ${mx} ${B.y}, ${B.x} ${B.y}"/>`;
+  });
+  for(const id in NODES){
+    const n=NODES[id];
+    const anchor = n.y<120 ? n.y-14 : n.y+22;
+    svg+=`<g class="node" data-n="${id}"><circle cx="${n.x}" cy="${n.y}" r="7"/><text x="${n.x}" y="${anchor}" text-anchor="middle">${n.label}</text></g>`;
+  }
+  svg+='</svg>';
+  document.getElementById('mapbox').innerHTML=svg;
+}
+function showRoute(r){
+  document.querySelectorAll('.rbtn').forEach(b=>{
+    const on=b.dataset.r===r.id;
+    b.classList.toggle('on',on);
+    b.style.color=on?r.color:'';
+  });
+  document.querySelectorAll('.edge').forEach(e=>{e.classList.remove('hot');e.style.stroke=''});
+  document.querySelectorAll('.node').forEach(n=>{n.classList.remove('hot');n.style.color=''});
+  for(let i=0;i<r.path.length-1;i++){
+    const e=document.querySelector(`.edge[data-e="${edgeKey(r.path[i],r.path[i+1])}"]`);
+    if(e){e.classList.add('hot');e.style.stroke=r.color;e.style.color=r.color;}
+  }
+  r.path.forEach(id=>{
+    const n=document.querySelector(`.node[data-n="${id}"]`);
+    n.classList.add('hot');n.style.color=r.color;
+    n.querySelector('circle').style.stroke=r.color;
+  });
+  document.querySelectorAll('.node:not(.hot) circle').forEach(c=>c.style.stroke='');
+  const names=r.path.map(id=>NODES[id].label).join('<span class="arrow">›</span>');
+  document.getElementById('routeDetail').innerHTML=
+    `<h3 style="color:${r.color}">${r.name}</h3><div class="rpath">${names}</div><p>${r.blurb}</p><p style="margin-top:8px"><b>Score outlook:</b> ${r.score}</p>`;
+}
+const rb=document.getElementById('routeBtns');
+ROUTES.forEach(r=>{
+  const b=document.createElement('button');b.className='rbtn';b.dataset.r=r.id;
+  b.innerHTML=`<span class="dot" style="background:${r.color}"></span>${r.name}`;
+  b.addEventListener('click',()=>showRoute(r));rb.appendChild(b);
+});
+buildMap();showRoute(ROUTES[3]);
+
+document.getElementById('branchList').innerHTML=BRANCHES.map(([k,v])=>`<li><b>${k}:</b> ${v}</li>`).join('');
+
+/* ===== STAGES ===== */
+const sl=document.getElementById('stageList');
+sl.innerHTML=STAGES.map(s=>`
+<div class="stage" id="st-${s.id}">
+  <button class="stage-head" aria-expanded="false">
+    <span class="stage-num">${String(s.n).padStart(2,'0')}</span>
+    <span class="stage-name">${s.name}</span>
+    <span class="veh">${s.veh}</span>
+    <span class="medal-chip">MEDAL ${s.medal} HITS</span>
+    <span class="chev">›</span>
+  </button>
+  <div class="stage-body">
+    <h4>How to get here</h4><p>${s.arrive}</p>
+    <h4>Exits &amp; route triggers</h4>
+    ${s.exits.map(e=>`<div class="exit"><span class="to">${e[0]}</span><span class="cond">${e[1]}</span></div>`).join('')}
+    <h4>Max-score strategy</h4>
+    <ul>${s.strat.map(x=>`<li>${x}</li>`).join('')}</ul>
+    <p class="pace">PACE CHECK · ${s.pace}</p>
+  </div>
+</div>`).join('');
+sl.querySelectorAll('.stage-head').forEach(h=>h.addEventListener('click',()=>{
+  const st=h.parentElement;const open=st.classList.toggle('open');
+  h.setAttribute('aria-expanded',open);
+}));
+
+/* ===== CHALLENGES ===== */
+let chStage='corneria', chDiff='normal';
+const pk=document.getElementById('chPicker');
+STAGES.forEach(s=>{
+  const b=document.createElement('button');b.className='pbtn';b.dataset.s=s.id;b.textContent=s.name;
+  b.addEventListener('click',()=>{chStage=s.id;renderCh()});pk.appendChild(b);
+});
+document.getElementById('segN').addEventListener('click',()=>{chDiff='normal';renderCh()});
+document.getElementById('segE').addEventListener('click',()=>{chDiff='expert';renderCh()});
+function renderCh(){
+  pk.querySelectorAll('.pbtn').forEach(b=>b.classList.toggle('on',b.dataset.s===chStage));
+  document.getElementById('segN').classList.toggle('on',chDiff==='normal');
+  document.getElementById('segE').classList.toggle('on',chDiff==='expert');
+  const s=STAGES.find(x=>x.id===chStage);
+  const list=CH[chStage][chDiff];
+  const exp=chDiff==='expert';
+  let html=`<div class="ch-title"><h3 style="color:${exp?'var(--rose)':'var(--hud)'}">${s.name} · ${exp?'Expert':'Normal'}</h3><span class="cnt">6 OBJECTIVES</span></div>`;
+  if(exp) html+=`<p class="lockednote">Expert challenges unlock once all six of this stage's Normal challenges are complete. Any collision breaks a wing instantly on Expert, so fly clean before chasing counts.</p>`;
+  html+=list.map((c,i)=>`<div class="chal ${exp?'exp':''}"><div class="obj"><span class="idx">${exp?'E':'N'}${i+1}</span>${c[0]}</div><div class="tip">${c[1]}</div></div>`).join('');
+  document.getElementById('chBody').innerHTML=html;
+}
+renderCh();
+
+</script>
+</body>
+</html>
