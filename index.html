@@ -253,22 +253,22 @@ footer .mono{color:var(--hud-dim)}
 <script>
 /* ===== ROUTE DATA ===== */
 const NODES = {
-  corneria:{x:183,y:283,label:"CORNERIA"},
-  meteo:{x:262,y:318,label:"METEO"},
-  sectory:{x:284,y:146,label:"SECTOR Y",top:1},
-  aquas:{x:354,y:194,label:"AQUAS"},
-  zoness:{x:432,y:170,label:"ZONESS",top:1},
-  katina:{x:361,y:262,label:"KATINA"},
-  solar:{x:441,y:248,label:"SOLAR"},
-  macbeth:{x:507,y:236,label:"MACBETH"},
-  fichina:{x:350,y:318,label:"FICHINA"},
-  titania:{x:551,y:290,label:"TITANIA"},
-  sectorx:{x:462,y:366,label:"SECTOR X"},
-  sectorz:{x:508,y:110,label:"SECTOR Z",top:1},
-  area6:{x:610,y:112,label:"AREA 6"},
-  venom2:{x:668,y:62,label:"VENOM 2",top:1},
-  venom:{x:674,y:146,label:"VENOM",top:1},
-  bolse:{x:646,y:196,label:"BOLSE"}
+  corneria:{x:52,y:292,label:"CORNERIA"},
+  meteo:{x:154,y:330,label:"METEO"},
+  sectory:{x:182,y:138,label:"SECTOR Y",top:1},
+  aquas:{x:273,y:192,label:"AQUAS"},
+  zoness:{x:374,y:166,label:"ZONESS",top:1},
+  katina:{x:282,y:268,label:"KATINA"},
+  solar:{x:386,y:252,label:"SOLAR"},
+  macbeth:{x:472,y:240,label:"MACBETH"},
+  fichina:{x:268,y:330,label:"FICHINA"},
+  titania:{x:530,y:300,label:"TITANIA"},
+  sectorx:{x:414,y:384,label:"SECTOR X"},
+  sectorz:{x:473,y:98,label:"SECTOR Z",top:1},
+  area6:{x:604,y:100,label:"AREA 6"},
+  venom2:{x:680,y:54,label:"VENOM 2",top:1},
+  venom:{x:688,y:140,label:"VENOM",top:1},
+  bolse:{x:652,y:196,label:"BOLSE"}
 };
 const EDGES = [
   ["corneria","meteo"],["corneria","sectory"],
@@ -656,8 +656,7 @@ function buildMap(){
   defs+='<radialGradient id="g-bolse" cx="35%" cy="30%"><stop offset="0%" stop-color="#d8e2f0"/><stop offset="60%" stop-color="#7e8ca4"/><stop offset="100%" stop-color="#3c465a"/></radialGradient>';
   for(const id in ART){const[a,b,c]=ART[id];defs+=`<radialGradient id="g-${id}" cx="35%" cy="30%"><stop offset="0%" stop-color="${a}"/><stop offset="55%" stop-color="${b}"/><stop offset="100%" stop-color="${c}"/></radialGradient>`;}
   defs+='</defs>';
-  let svg='<svg viewBox="0 0 740 480" role="img" aria-label="Lylat System route map, matching the in-game hologram layout">'+defs;
-  [67,80,102,117].forEach(r=>{svg+=`<circle cx="441" cy="248" r="${r}" fill="none" stroke="#1a2745" stroke-width="1"/>`;});
+  let svg='<svg viewBox="0 0 740 430" role="img" aria-label="Lylat System route map, matching the in-game hologram layout">'+defs;
   EDGES.forEach(([a,b])=>{
     const A=NODES[a],B=NODES[b];
     const mx=(A.x+B.x)/2;
