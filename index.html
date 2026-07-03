@@ -266,8 +266,8 @@ const NODES = {
   sectorx:{x:414,y:384,label:"SECTOR X"},
   sectorz:{x:473,y:98,label:"SECTOR Z",top:1},
   area6:{x:604,y:100,label:"AREA 6"},
-  venom2:{x:680,y:54,label:"VENOM 2",top:1},
-  venom:{x:688,y:140,label:"VENOM",top:1},
+  venom2:{x:692,y:150,label:"VENOM 2",top:1},
+  venom:{x:692,y:150,label:"VENOM"},
   bolse:{x:652,y:196,label:"BOLSE"}
 };
 const EDGES = [
@@ -640,7 +640,7 @@ function buildMap(){
     venom2:['#d2ba66','#806826','#332a0c']
   };
   const NEB={sectory:['#8fa8ff','#c46bff'],sectorx:['#ffd98a','#dd9636'],sectorz:['#ffab63','#e05238']};
-  const HALO={solar:17,sectory:19,sectorx:19,sectorz:19,titania:14,meteo:12,bolse:13};
+  const HALO={solar:17,sectory:19,sectorx:19,sectorz:19,titania:14,meteo:12,bolse:13,venom:13,venom2:17};
   function halo(id){return HALO[id]||12}
   function hexPts(cx,cy,r){let p=[];for(let i=0;i<6;i++){const a=Math.PI/3*i+Math.PI/6;p.push((cx+r*Math.cos(a)).toFixed(1)+','+(cy+r*Math.sin(a)).toFixed(1));}return p.join(' ')}
   function art(id,n){
@@ -649,6 +649,8 @@ function buildMap(){
     if(id==='meteo')return `<circle cx="${n.x}" cy="${n.y}" r="5" fill="#9aa3b5"/><circle cx="${n.x+7}" cy="${n.y-4}" r="3" fill="#6b7488"/><circle cx="${n.x-7}" cy="${n.y+4}" r="2.6" fill="#828da3"/><circle cx="${n.x+4}" cy="${n.y+7}" r="1.8" fill="#59637a"/><circle cx="${n.x-5}" cy="${n.y-6}" r="1.6" fill="#707b92"/>`;
     if(id==='bolse')return `<rect x="${n.x-15}" y="${n.y-2}" width="8" height="4" rx="1" fill="#5fe0c8" opacity=".65"/><rect x="${n.x+7}" y="${n.y-2}" width="8" height="4" rx="1" fill="#5fe0c8" opacity=".65"/><polygon points="${hexPts(n.x,n.y,8)}" fill="url(#g-bolse)" stroke="#31405c" stroke-width="1"/>`;
     if(id==='titania')return `<ellipse cx="${n.x}" cy="${n.y}" rx="15" ry="4.5" fill="none" stroke="#d99a7e" stroke-width="1.4" opacity=".8" transform="rotate(-18 ${n.x} ${n.y})"/><circle cx="${n.x}" cy="${n.y}" r="8.5" fill="url(#g-titania)"/>`;
+    if(id==='venom')return `<circle cx="${n.x}" cy="${n.y}" r="10" fill="url(#g-venom)"/>`;
+    if(id==='venom2')return '';
     return `<circle cx="${n.x}" cy="${n.y}" r="9" fill="url(#g-${id})"/>`;
   }
   let defs='<defs><filter id="soft" x="-90%" y="-90%" width="280%" height="280%"><feGaussianBlur stdDeviation="4"/></filter>';
