@@ -70,8 +70,8 @@ section.on{display:block}
 .rbtn.on{color:var(--ink);border-color:currentColor}
 .edge{stroke:#233052;stroke-width:2;fill:none;transition:all .25s}
 .edge.hot{stroke-width:3.5;filter:drop-shadow(0 0 4px currentColor)}
-.node circle{fill:var(--panel);stroke:#3a4a72;stroke-width:1.5;transition:all .25s}
-.node.hot circle{stroke-width:2.5;filter:drop-shadow(0 0 5px currentColor)}
+.node .halo{fill:rgba(0,0,0,0);stroke:rgba(122,142,182,.35);stroke-width:1.2;transition:all .25s}
+.node.hot .halo{stroke-width:2.4;filter:drop-shadow(0 0 6px currentColor)}
 .node text{fill:var(--dim);font-family:'IBM Plex Mono',monospace;font-size:10.5px;transition:fill .25s}
 .node.hot text{fill:var(--ink)}
 .route-detail{margin-top:2px}
@@ -127,11 +127,33 @@ section.on{display:block}
 .chal .tip::before{content:"TACTIC — ";font-family:'IBM Plex Mono',monospace;font-size:.66rem;color:var(--hud);letter-spacing:.1em}
 .chal.exp .tip::before{color:var(--rose)}
 .lockednote{color:var(--dim);font-size:.83rem;margin:10px 0 16px;border:1px dashed var(--line);padding:10px 12px;border-radius:8px}
+.chal{display:flex;gap:12px;align-items:flex-start}
+.chal-main{flex:1}
+.ck{appearance:none;-webkit-appearance:none;width:22px;height:22px;min-width:22px;border:1.5px solid var(--line);border-radius:6px;background:var(--panel2);cursor:pointer;margin-top:2px;position:relative;transition:all .15s}
+.ck:checked{background:var(--hud);border-color:var(--hud)}
+.chal.exp .ck:checked{background:var(--rose);border-color:var(--rose)}
+.ck:checked::after{content:"\2713";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#08221e;font-weight:700;font-size:.85rem}
+.chal.exp .ck:checked::after{color:#2b0d13}
+.ck:focus-visible{outline:2px solid var(--hud);outline-offset:2px}
+.chal.done .obj{color:var(--dim);text-decoration:line-through;text-decoration-color:rgba(148,161,189,.55)}
+.prog{margin:0 0 16px}
+.progbar{height:8px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.progbar i{display:block;height:100%;background:linear-gradient(90deg,var(--hud),var(--green));width:0;transition:width .3s}
+.progmeta{display:flex;justify-content:space-between;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--dim);margin-top:8px;flex-wrap:wrap}
+.pbtn .pc{color:var(--green);margin-left:6px}
+.pbtn.on .pc{color:#0a3a2e}
+.medaltrack{display:flex;gap:18px;flex-wrap:wrap;margin-top:6px}
+.medaltrack label{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--dim);cursor:pointer}
+.medaltrack .ck{margin-top:0}
+.medaltrack label.exp .ck:checked{background:var(--rose);border-color:var(--rose)}
+.medaltrack label.exp .ck:checked::after{color:#2b0d13}
 
 footer{border-top:1px solid var(--line);padding:22px 0 40px;color:var(--dim);font-size:.78rem}
 footer .mono{color:var(--hud-dim)}
 
 @media (max-width:640px){
+  .mapbox{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .mapbox svg{min-width:620px}
   .stage-head{flex-wrap:wrap;row-gap:6px}
   .stage-name{flex-basis:calc(100% - 70px)}
   .medal-chip{font-size:.72rem}
@@ -209,6 +231,10 @@ footer .mono{color:var(--hud-dim)}
 <section id="challenges">
   <h2 class="sec-title">Challenge Mode: All 192 Objectives</h2>
   <p class="sec-note">Each stage has 6 Normal and 6 Expert challenges. Expert unlocks per stage once all six Normal tasks are done. Challenges only count in Challenge Mode (never the campaign) and medals cannot be earned here. The moment a challenge's checkbox appears you can quit and it saves, so run conflicting objectives separately and bail early. A greyed-out box means the requirement failed: restart immediately, because Challenge Mode has no checkpoints.</p>
+  <div class="prog">
+    <div class="progbar"><i id="chBarFill"></i></div>
+    <div class="progmeta"><span id="chTotal">0 / 192 COMPLETE</span><span id="medalCount">0 / 32 MEDALS TRACKED</span><button id="chReset" class="pbtn">Reset all progress</button></div>
+  </div>
   <div class="picker" id="chPicker"></div>
   <div class="seg" role="tablist">
     <button id="segN" class="on norm" role="tab">Normal</button>
@@ -227,12 +253,22 @@ footer .mono{color:var(--hud-dim)}
 <script>
 /* ===== ROUTE DATA ===== */
 const NODES = {
-  corneria:{x:62,y:300,label:"CORNERIA"}, meteo:{x:168,y:205,label:"METEO"}, sectory:{x:168,y:322,label:"SECTOR Y"},
-  fichina:{x:274,y:92,label:"FICHINA"}, katina:{x:274,y:210,label:"KATINA"}, aquas:{x:274,y:330,label:"AQUAS"},
-  sectorx:{x:380,y:92,label:"SECTOR X"}, solar:{x:380,y:212,label:"SOLAR"}, zoness:{x:380,y:332,label:"ZONESS"},
-  titania:{x:486,y:58,label:"TITANIA"}, sectorz:{x:486,y:196,label:"SECTOR Z"}, macbeth:{x:486,y:332,label:"MACBETH"},
-  bolse:{x:592,y:126,label:"BOLSE"}, area6:{x:592,y:290,label:"AREA 6"},
-  venom:{x:678,y:126,label:"VENOM"}, venom2:{x:678,y:290,label:"VENOM 2"}
+  corneria:{x:183,y:283,label:"CORNERIA"},
+  meteo:{x:262,y:318,label:"METEO"},
+  sectory:{x:284,y:146,label:"SECTOR Y",top:1},
+  aquas:{x:354,y:194,label:"AQUAS"},
+  zoness:{x:432,y:170,label:"ZONESS",top:1},
+  katina:{x:361,y:262,label:"KATINA"},
+  solar:{x:441,y:248,label:"SOLAR"},
+  macbeth:{x:507,y:236,label:"MACBETH"},
+  fichina:{x:350,y:318,label:"FICHINA"},
+  titania:{x:551,y:290,label:"TITANIA"},
+  sectorx:{x:462,y:366,label:"SECTOR X"},
+  sectorz:{x:508,y:110,label:"SECTOR Z",top:1},
+  area6:{x:610,y:112,label:"AREA 6"},
+  venom2:{x:668,y:62,label:"VENOM 2",top:1},
+  venom:{x:674,y:146,label:"VENOM",top:1},
+  bolse:{x:646,y:196,label:"BOLSE"}
 };
 const EDGES = [
   ["corneria","meteo"],["corneria","sectory"],
@@ -591,7 +627,37 @@ tabs.forEach(t=>t.addEventListener('click',()=>{
 /* ===== ROUTE MAP ===== */
 function edgeKey(a,b){return a+"|"+b}
 function buildMap(){
-  let svg='<svg viewBox="0 0 740 380" role="img" aria-label="Lylat System route map">';
+  const ART={
+    corneria:['#8fe0b0','#2f8f63','#0f3d2c'],
+    aquas:['#a8dcff','#2f6fd0','#0e3566'],
+    zoness:['#e2f5a8','#84a83e','#3c4d16'],
+    katina:['#f4dcae','#bd8c4e','#5c401c'],
+    macbeth:['#ded4c8','#8d7f72','#453b33'],
+    fichina:['#ffffff','#c2d8ea','#6684a2'],
+    titania:['#f4a88e','#b85a3e','#521f12'],
+    area6:['#e08a8a','#8a3030','#380f0f'],
+    venom:['#ead47f','#9c7e2f','#463610'],
+    venom2:['#d2ba66','#806826','#332a0c']
+  };
+  const NEB={sectory:['#8fa8ff','#c46bff'],sectorx:['#ffd98a','#dd9636'],sectorz:['#ffab63','#e05238']};
+  const HALO={solar:17,sectory:19,sectorx:19,sectorz:19,titania:14,meteo:12,bolse:13};
+  function halo(id){return HALO[id]||12}
+  function hexPts(cx,cy,r){let p=[];for(let i=0;i<6;i++){const a=Math.PI/3*i+Math.PI/6;p.push((cx+r*Math.cos(a)).toFixed(1)+','+(cy+r*Math.sin(a)).toFixed(1));}return p.join(' ')}
+  function art(id,n){
+    if(id==='solar')return `<circle cx="${n.x}" cy="${n.y}" r="19" fill="#ffb03a" opacity=".16" filter="url(#soft)"/><circle cx="${n.x}" cy="${n.y}" r="12" fill="url(#g-solar)"/>`;
+    if(NEB[id]){const[c1,c2]=NEB[id];return `<g filter="url(#soft)"><ellipse cx="${n.x}" cy="${n.y}" rx="16" ry="8" fill="${c2}" opacity=".55" transform="rotate(-18 ${n.x} ${n.y})"/><ellipse cx="${n.x}" cy="${n.y}" rx="16" ry="8" fill="${c1}" opacity=".55" transform="rotate(72 ${n.x} ${n.y})"/><circle cx="${n.x}" cy="${n.y}" r="4" fill="${c1}" opacity=".9"/></g>`;}
+    if(id==='meteo')return `<circle cx="${n.x}" cy="${n.y}" r="5" fill="#9aa3b5"/><circle cx="${n.x+7}" cy="${n.y-4}" r="3" fill="#6b7488"/><circle cx="${n.x-7}" cy="${n.y+4}" r="2.6" fill="#828da3"/><circle cx="${n.x+4}" cy="${n.y+7}" r="1.8" fill="#59637a"/><circle cx="${n.x-5}" cy="${n.y-6}" r="1.6" fill="#707b92"/>`;
+    if(id==='bolse')return `<rect x="${n.x-15}" y="${n.y-2}" width="8" height="4" rx="1" fill="#5fe0c8" opacity=".65"/><rect x="${n.x+7}" y="${n.y-2}" width="8" height="4" rx="1" fill="#5fe0c8" opacity=".65"/><polygon points="${hexPts(n.x,n.y,8)}" fill="url(#g-bolse)" stroke="#31405c" stroke-width="1"/>`;
+    if(id==='titania')return `<ellipse cx="${n.x}" cy="${n.y}" rx="15" ry="4.5" fill="none" stroke="#d99a7e" stroke-width="1.4" opacity=".8" transform="rotate(-18 ${n.x} ${n.y})"/><circle cx="${n.x}" cy="${n.y}" r="8.5" fill="url(#g-titania)"/>`;
+    return `<circle cx="${n.x}" cy="${n.y}" r="9" fill="url(#g-${id})"/>`;
+  }
+  let defs='<defs><filter id="soft" x="-90%" y="-90%" width="280%" height="280%"><feGaussianBlur stdDeviation="4"/></filter>';
+  defs+='<radialGradient id="g-solar" cx="40%" cy="35%"><stop offset="0%" stop-color="#fff3b0"/><stop offset="45%" stop-color="#ffb03a"/><stop offset="100%" stop-color="#c84e14"/></radialGradient>';
+  defs+='<radialGradient id="g-bolse" cx="35%" cy="30%"><stop offset="0%" stop-color="#d8e2f0"/><stop offset="60%" stop-color="#7e8ca4"/><stop offset="100%" stop-color="#3c465a"/></radialGradient>';
+  for(const id in ART){const[a,b,c]=ART[id];defs+=`<radialGradient id="g-${id}" cx="35%" cy="30%"><stop offset="0%" stop-color="${a}"/><stop offset="55%" stop-color="${b}"/><stop offset="100%" stop-color="${c}"/></radialGradient>`;}
+  defs+='</defs>';
+  let svg='<svg viewBox="0 0 740 480" role="img" aria-label="Lylat System route map, matching the in-game hologram layout">'+defs;
+  [67,80,102,117].forEach(r=>{svg+=`<circle cx="441" cy="248" r="${r}" fill="none" stroke="#1a2745" stroke-width="1"/>`;});
   EDGES.forEach(([a,b])=>{
     const A=NODES[a],B=NODES[b];
     const mx=(A.x+B.x)/2;
@@ -599,8 +665,9 @@ function buildMap(){
   });
   for(const id in NODES){
     const n=NODES[id];
-    const anchor = n.y<120 ? n.y-14 : n.y+22;
-    svg+=`<g class="node" data-n="${id}"><circle cx="${n.x}" cy="${n.y}" r="7"/><text x="${n.x}" y="${anchor}" text-anchor="middle">${n.label}</text></g>`;
+    const h=halo(id);
+    const anchor = n.top ? n.y-(h+7) : n.y+h+13;
+    svg+=`<g class="node" data-n="${id}">${art(id,n)}<circle class="halo" cx="${n.x}" cy="${n.y}" r="${h}"/><text x="${n.x}" y="${anchor}" text-anchor="middle">${n.label}</text></g>`;
   }
   svg+='</svg>';
   document.getElementById('mapbox').innerHTML=svg;
@@ -620,9 +687,9 @@ function showRoute(r){
   r.path.forEach(id=>{
     const n=document.querySelector(`.node[data-n="${id}"]`);
     n.classList.add('hot');n.style.color=r.color;
-    n.querySelector('circle').style.stroke=r.color;
+    n.querySelector('.halo').style.stroke=r.color;
   });
-  document.querySelectorAll('.node:not(.hot) circle').forEach(c=>c.style.stroke='');
+  document.querySelectorAll('.node:not(.hot) .halo').forEach(c=>c.style.stroke='');
   const names=r.path.map(id=>NODES[id].label).join('<span class="arrow">›</span>');
   document.getElementById('routeDetail').innerHTML=
     `<h3 style="color:${r.color}">${r.name}</h3><div class="rpath">${names}</div><p>${r.blurb}</p><p style="margin-top:8px"><b>Score outlook:</b> ${r.score}</p>`;
@@ -636,6 +703,32 @@ ROUTES.forEach(r=>{
 buildMap();showRoute(ROUTES[3]);
 
 document.getElementById('branchList').innerHTML=BRANCHES.map(([k,v])=>`<li><b>${k}:</b> ${v}</li>`).join('');
+
+/* ===== PROGRESS PERSISTENCE ===== */
+const STORE_KEY='sf2-lylat-progress-v1';
+let PROG={};
+try{PROG=JSON.parse(localStorage.getItem(STORE_KEY)||'{}')||{};}catch(e){PROG={};}
+function saveProg(){try{localStorage.setItem(STORE_KEY,JSON.stringify(PROG));}catch(e){}}
+function setProg(k,v){if(v){PROG[k]=1;}else{delete PROG[k];}saveProg();updateCounts();}
+function countStage(sid){let d=0;['normal','expert'].forEach(df=>CH[sid][df].forEach((c,i)=>{if(PROG['c.'+sid+'.'+df+'.'+i])d++;}));return d;}
+function updateCounts(){
+  let t=0,m=0;for(const k in PROG){if(k.indexOf('c.')===0)t++;if(k.indexOf('m.')===0)m++;}
+  const tot=document.getElementById('chTotal');if(tot)tot.textContent=t+' / 192 COMPLETE';
+  const bar=document.getElementById('chBarFill');if(bar)bar.style.width=(t/192*100).toFixed(1)+'%';
+  const mc=document.getElementById('medalCount');if(mc)mc.textContent=m+' / 32 MEDALS TRACKED';
+  document.querySelectorAll('#chPicker .pbtn[data-s]').forEach(b=>{
+    let pc=b.querySelector('.pc');
+    if(!pc){pc=document.createElement('span');pc.className='pc';b.appendChild(pc);}
+    pc.textContent=countStage(b.dataset.s)+'/12';
+  });
+}
+document.addEventListener('change',e=>{
+  const el=e.target;
+  if(el&&el.classList&&el.classList.contains('ck')){
+    setProg(el.dataset.k,el.checked);
+    const card=el.closest('.chal');if(card)card.classList.toggle('done',el.checked);
+  }
+});
 
 /* ===== STAGES ===== */
 const sl=document.getElementById('stageList');
@@ -655,6 +748,11 @@ sl.innerHTML=STAGES.map(s=>`
     <h4>Max-score strategy</h4>
     <ul>${s.strat.map(x=>`<li>${x}</li>`).join('')}</ul>
     <p class="pace">PACE CHECK · ${s.pace}</p>
+    <h4>Medal tracker</h4>
+    <div class="medaltrack">
+      <label><input type="checkbox" class="ck" data-k="m.${s.id}.n" ${PROG['m.'+s.id+'.n']?'checked':''}><span>Normal medal earned</span></label>
+      <label class="exp"><input type="checkbox" class="ck" data-k="m.${s.id}.e" ${PROG['m.'+s.id+'.e']?'checked':''}><span>Expert medal earned</span></label>
+    </div>
   </div>
 </div>`).join('');
 sl.querySelectorAll('.stage-head').forEach(h=>h.addEventListener('click',()=>{
@@ -680,10 +778,22 @@ function renderCh(){
   const exp=chDiff==='expert';
   let html=`<div class="ch-title"><h3 style="color:${exp?'var(--rose)':'var(--hud)'}">${s.name} · ${exp?'Expert':'Normal'}</h3><span class="cnt">6 OBJECTIVES</span></div>`;
   if(exp) html+=`<p class="lockednote">Expert challenges unlock once all six of this stage's Normal challenges are complete. Any collision breaks a wing instantly on Expert, so fly clean before chasing counts.</p>`;
-  html+=list.map((c,i)=>`<div class="chal ${exp?'exp':''}"><div class="obj"><span class="idx">${exp?'E':'N'}${i+1}</span>${c[0]}</div><div class="tip">${c[1]}</div></div>`).join('');
+  html+=list.map((c,i)=>{
+    const key='c.'+chStage+'.'+chDiff+'.'+i;
+    const done=!!PROG[key];
+    return `<div class="chal ${exp?'exp':''} ${done?'done':''}"><input type="checkbox" class="ck" data-k="${key}" ${done?'checked':''} aria-label="Mark ${c[0]} as complete"><div class="chal-main"><div class="obj"><span class="idx">${exp?'E':'N'}${i+1}</span>${c[0]}</div><div class="tip">${c[1]}</div></div></div>`;
+  }).join('');
   document.getElementById('chBody').innerHTML=html;
 }
 renderCh();
+document.getElementById('chReset').addEventListener('click',()=>{
+  if(confirm('Clear all saved challenge and medal progress on this device?')){
+    PROG={};saveProg();
+    document.querySelectorAll('.ck').forEach(c=>{c.checked=false;const card=c.closest('.chal');if(card)card.classList.remove('done');});
+    renderCh();updateCounts();
+  }
+});
+updateCounts();
 
 </script>
 </body>
