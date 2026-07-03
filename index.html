@@ -267,7 +267,7 @@ const NODES = {
   sectorz:{x:473,y:98,label:"SECTOR Z",top:1},
   area6:{x:604,y:100,label:"AREA 6"},
   venom2:{x:692,y:150,label:"VENOM 2",top:1},
-  venom:{x:692,y:150,label:"VENOM"},
+  venom:{x:692,y:150,label:"VENOM",ly:6},
   bolse:{x:652,y:196,label:"BOLSE"}
 };
 const EDGES = [
@@ -645,7 +645,11 @@ function buildMap(){
   function hexPts(cx,cy,r){let p=[];for(let i=0;i<6;i++){const a=Math.PI/3*i+Math.PI/6;p.push((cx+r*Math.cos(a)).toFixed(1)+','+(cy+r*Math.sin(a)).toFixed(1));}return p.join(' ')}
   function art(id,n){
     if(id==='solar')return `<circle cx="${n.x}" cy="${n.y}" r="19" fill="#ffb03a" opacity=".16" filter="url(#soft)"/><circle cx="${n.x}" cy="${n.y}" r="12" fill="url(#g-solar)"/>`;
-    if(NEB[id]){const[c1,c2]=NEB[id];return `<g filter="url(#soft)"><ellipse cx="${n.x}" cy="${n.y}" rx="16" ry="8" fill="${c2}" opacity=".55" transform="rotate(-18 ${n.x} ${n.y})"/><ellipse cx="${n.x}" cy="${n.y}" rx="16" ry="8" fill="${c1}" opacity=".55" transform="rotate(72 ${n.x} ${n.y})"/><circle cx="${n.x}" cy="${n.y}" r="4" fill="${c1}" opacity=".9"/></g>`;}
+    if(NEB[id]){const[c1,c2]=NEB[id];const x=n.x,y=n.y;
+      if(id==='sectorx')return `<g filter="url(#soft2)"><ellipse cx="${x}" cy="${y}" rx="15" ry="4.5" fill="${c2}" opacity=".65" transform="rotate(45 ${x} ${y})"/><ellipse cx="${x}" cy="${y}" rx="15" ry="4.5" fill="${c1}" opacity=".65" transform="rotate(-45 ${x} ${y})"/><circle cx="${x}" cy="${y}" r="3.5" fill="${c1}" opacity=".9"/></g>`;
+      if(id==='sectory')return `<g filter="url(#soft2)"><ellipse cx="${x-5}" cy="${y-6}" rx="8.5" ry="3.8" fill="${c2}" opacity=".65" transform="rotate(50 ${x-5} ${y-6})"/><ellipse cx="${x+5}" cy="${y-6}" rx="8.5" ry="3.8" fill="${c1}" opacity=".65" transform="rotate(-50 ${x+5} ${y-6})"/><ellipse cx="${x}" cy="${y+7}" rx="3.8" ry="8.5" fill="${c2}" opacity=".65"/><circle cx="${x}" cy="${y}" r="3.2" fill="${c1}" opacity=".9"/></g>`;
+      if(id==='sectorz')return `<g filter="url(#soft2)"><ellipse cx="${x}" cy="${y-8}" rx="9.5" ry="3.4" fill="${c2}" opacity=".7"/><ellipse cx="${x}" cy="${y}" rx="11.5" ry="3.4" fill="${c1}" opacity=".65" transform="rotate(-40 ${x} ${y})"/><ellipse cx="${x}" cy="${y+8}" rx="9.5" ry="3.4" fill="${c2}" opacity=".7"/></g>`;
+    }
     if(id==='meteo')return `<circle cx="${n.x}" cy="${n.y}" r="5" fill="#9aa3b5"/><circle cx="${n.x+7}" cy="${n.y-4}" r="3" fill="#6b7488"/><circle cx="${n.x-7}" cy="${n.y+4}" r="2.6" fill="#828da3"/><circle cx="${n.x+4}" cy="${n.y+7}" r="1.8" fill="#59637a"/><circle cx="${n.x-5}" cy="${n.y-6}" r="1.6" fill="#707b92"/>`;
     if(id==='bolse')return `<rect x="${n.x-15}" y="${n.y-2}" width="8" height="4" rx="1" fill="#5fe0c8" opacity=".65"/><rect x="${n.x+7}" y="${n.y-2}" width="8" height="4" rx="1" fill="#5fe0c8" opacity=".65"/><polygon points="${hexPts(n.x,n.y,8)}" fill="url(#g-bolse)" stroke="#31405c" stroke-width="1"/>`;
     if(id==='titania')return `<ellipse cx="${n.x}" cy="${n.y}" rx="15" ry="4.5" fill="none" stroke="#d99a7e" stroke-width="1.4" opacity=".8" transform="rotate(-18 ${n.x} ${n.y})"/><circle cx="${n.x}" cy="${n.y}" r="8.5" fill="url(#g-titania)"/>`;
@@ -653,7 +657,7 @@ function buildMap(){
     if(id==='venom2')return '';
     return `<circle cx="${n.x}" cy="${n.y}" r="9" fill="url(#g-${id})"/>`;
   }
-  let defs='<defs><filter id="soft" x="-90%" y="-90%" width="280%" height="280%"><feGaussianBlur stdDeviation="4"/></filter>';
+  let defs='<defs><filter id="soft" x="-90%" y="-90%" width="280%" height="280%"><feGaussianBlur stdDeviation="4"/></filter><filter id="soft2" x="-90%" y="-90%" width="280%" height="280%"><feGaussianBlur stdDeviation="2.4"/></filter>';
   defs+='<radialGradient id="g-solar" cx="40%" cy="35%"><stop offset="0%" stop-color="#fff3b0"/><stop offset="45%" stop-color="#ffb03a"/><stop offset="100%" stop-color="#c84e14"/></radialGradient>';
   defs+='<radialGradient id="g-bolse" cx="35%" cy="30%"><stop offset="0%" stop-color="#d8e2f0"/><stop offset="60%" stop-color="#7e8ca4"/><stop offset="100%" stop-color="#3c465a"/></radialGradient>';
   for(const id in ART){const[a,b,c]=ART[id];defs+=`<radialGradient id="g-${id}" cx="35%" cy="30%"><stop offset="0%" stop-color="${a}"/><stop offset="55%" stop-color="${b}"/><stop offset="100%" stop-color="${c}"/></radialGradient>`;}
@@ -667,7 +671,7 @@ function buildMap(){
   for(const id in NODES){
     const n=NODES[id];
     const h=halo(id);
-    const anchor = n.top ? n.y-(h+7) : n.y+h+13;
+    const anchor = n.top ? n.y-(h+7)-(n.ly||0) : n.y+h+13+(n.ly||0);
     svg+=`<g class="node" data-n="${id}">${art(id,n)}<circle class="halo" cx="${n.x}" cy="${n.y}" r="${h}"/><text x="${n.x}" y="${anchor}" text-anchor="middle">${n.label}</text></g>`;
   }
   svg+='</svg>';
