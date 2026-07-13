@@ -15,15 +15,42 @@
   --on-hud:#08221e; --on-rose:#2b0d13; --on-hud-dim:#0a3a2e;
   --radius:10px;
 }
-html[data-theme="light"]{
-  --bg:#edf1f8; --panel:#ffffff; --panel2:#e4eaf4; --line:#c6d2e4;
-  --ink:#16223b; --dim:#57678a; --hud:#0c8f7c; --hud-dim:#8fcdc2;
-  --amber:#a86a00; --rose:#c23e5b; --violet:#6a55d8; --green:#2c8c4d;
-  --edge:#b7c4db; --halo:rgba(70,95,135,.45);
-  --on-hud:#ffffff; --on-rose:#ffffff; --on-hud-dim:#eafff8;
+html[data-theme="fox"]{
+  --bg:#191203; --panel:#241a08; --panel2:#1b1305; --line:#453413;
+  --ink:#f7efdc; --dim:#b5a37c; --hud:#f5c34b; --hud-dim:#6b5620;
+  --amber:#ff9d45; --rose:#f07a8e; --violet:#c9a2ff; --green:#b3d987;
+  --edge:#4a3a16; --halo:rgba(180,155,95,.4);
+  --on-hud:#2b1f04; --on-hud-dim:#4a3810;
 }
-html[data-theme="light"] body{background-image:none}
-html[data-theme="light"] nav{background:rgba(237,241,248,.92)}
+html[data-theme="fox"] body{background-image:radial-gradient(circle at 15% 10%, #2e2306 0%, transparent 45%),radial-gradient(circle at 85% 90%, #262009 0%, transparent 40%)}
+html[data-theme="fox"] nav{background:rgba(25,18,3,.92)}
+html[data-theme="peppy"]{
+  --bg:#f3ecdd; --panel:#fdf8ee; --panel2:#ebe0c8; --line:#d5c5a4;
+  --ink:#33261a; --dim:#7d6a50; --hud:#bd5a10; --hud-dim:#e2b98f;
+  --amber:#8a5a00; --rose:#b8365c; --violet:#6a55d8; --green:#47762c;
+  --edge:#cdbb97; --halo:rgba(140,110,70,.45);
+  --on-hud:#fff6ea; --on-hud-dim:#ffe3c8;
+}
+html[data-theme="peppy"] body{background-image:none}
+html[data-theme="peppy"] nav{background:rgba(243,236,221,.93)}
+html[data-theme="falco"]{
+  --bg:#05090f; --panel:#0a1420; --panel2:#070f19; --line:#16283d;
+  --ink:#e6f0fa; --dim:#7f95ad; --hud:#4da6ff; --hud-dim:#1e4a73;
+  --amber:#ffb35c; --rose:#ff6b7d; --violet:#9f8fff; --green:#8fd987;
+  --edge:#1a2c44; --halo:rgba(100,140,190,.4);
+  --on-hud:#041423; --on-hud-dim:#0c2a44;
+}
+html[data-theme="falco"] body{background-image:radial-gradient(circle at 15% 10%, #0d1c30 0%, transparent 45%),radial-gradient(circle at 85% 90%, #0e1626 0%, transparent 40%)}
+html[data-theme="falco"] nav{background:rgba(5,9,15,.92)}
+html[data-theme="slippy"]{
+  --bg:#07130b; --panel:#0d2013; --panel2:#0a170e; --line:#1d4029;
+  --ink:#e9f7ec; --dim:#8fb59c; --hud:#5fe07a; --hud-dim:#265b34;
+  --amber:#f5d45c; --rose:#ff8f9e; --violet:#a8b5ff; --green:#c3f5a0;
+  --edge:#1c3b27; --halo:rgba(110,175,130,.4);
+  --on-hud:#06220e; --on-hud-dim:#0e3a1c;
+}
+html[data-theme="slippy"] body{background-image:radial-gradient(circle at 15% 10%, #103322 0%, transparent 45%),radial-gradient(circle at 85% 90%, #0e2a16 0%, transparent 40%)}
+html[data-theme="slippy"] nav{background:rgba(7,19,11,.92)}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;line-height:1.55;
@@ -159,6 +186,16 @@ section.on{display:block}
 .pbtn .pc.full{color:var(--amber);font-weight:700}
 .progbar i.full{background:linear-gradient(90deg,var(--amber),#ffd98a)}
 #themeBtn{margin-left:auto}
+.adot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--hud);margin-right:7px}
+.tab.pop{animation:ckpop .28s ease}
+.scrollnav{position:fixed;right:16px;bottom:18px;display:flex;flex-direction:column;gap:8px;z-index:60}
+.snbtn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--hud);
+  font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.35);transition:opacity .2s,transform .2s,border-color .15s}
+.snbtn:hover{border-color:var(--hud)}
+.snbtn:focus-visible{outline:2px solid var(--hud);outline-offset:2px}
+.snbtn.hide{opacity:0;pointer-events:none;transform:translateY(6px)}
+@media (max-width:640px){.scrollnav{right:12px;bottom:14px}.snbtn{width:40px;height:40px}}
 .prog{margin:0 0 16px}
 .progbar{height:8px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;overflow:hidden}
 .progbar i{display:block;height:100%;background:linear-gradient(90deg,var(--hud),var(--green));width:0;transition:width .3s}
@@ -201,7 +238,7 @@ footer .mono{color:var(--hud-dim)}
   <button class="tab" data-sec="routes" role="tab">Routes</button>
   <button class="tab" data-sec="stages" role="tab">Stages &amp; Scoring</button>
   <button class="tab" data-sec="challenges" role="tab">Challenges</button>
-  <button class="tab" id="themeBtn" aria-label="Switch between dark and light themes">◐ Theme</button>
+  <button class="tab" id="themeBtn" aria-label="Cycle through theme colour schemes"></button>
 </div></div></nav>
 
 <main class="wrap">
@@ -277,6 +314,11 @@ footer .mono{color:var(--hud-dim)}
   <p>Fan-made strategy reference for Star Fox (Nintendo Switch 2, Velan Studios / Nintendo, released 25 June 2026). Compiled from post-launch community guides, official patch notes and testing current to 13 July 2026; verify exact figures in game, as patches may adjust values. Not affiliated with Nintendo.</p>
   <p class="mono" style="margin-top:8px">// GOOD LUCK, AND DO A BARREL ROLL</p>
 </div></footer>
+
+<div class="scrollnav">
+  <button class="snbtn hide" id="toTop" aria-label="Scroll to top of page">▲</button>
+  <button class="snbtn" id="toBottom" aria-label="Scroll to bottom of page">▼</button>
+</div>
 
 <script>
 /* ===== ROUTE DATA ===== */
@@ -650,6 +692,7 @@ tabs.forEach(t=>t.addEventListener('click',()=>{
   document.querySelectorAll('main section').forEach(s=>s.classList.remove('on'));
   document.getElementById(t.dataset.sec).classList.add('on');
   window.scrollTo({top:0,behavior:'smooth'});
+  if(typeof updScroll==='function')updScroll();
 }));
 
 /* ===== ROUTE MAP ===== */
@@ -737,16 +780,33 @@ buildMap();showRoute(ROUTES[3]);
 
 document.getElementById('branchList').innerHTML=BRANCHES.map(([k,v])=>`<li><b>${k}:</b> ${v}</li>`).join('');
 
-/* ===== THEME ===== */
+/* ===== THEMES ===== */
+const THEMES=[
+  {id:'cockpit',name:'Cockpit'},
+  {id:'fox',name:'Fox'},
+  {id:'peppy',name:'Peppy'},
+  {id:'falco',name:'Falco'},
+  {id:'slippy',name:'Slippy'}
+];
 const THEME_KEY='sf2-theme';
-function applyTheme(t){document.documentElement.setAttribute('data-theme',t);}
-let theme='dark';
-try{theme=localStorage.getItem(THEME_KEY)||'dark';}catch(e){}
-applyTheme(theme);
-document.getElementById('themeBtn').addEventListener('click',()=>{
-  theme=(theme==='dark')?'light':'dark';
-  applyTheme(theme);
-  try{localStorage.setItem(THEME_KEY,theme);}catch(e){}
+let themeIdx=0;
+try{
+  const saved=localStorage.getItem(THEME_KEY);
+  const f=THEMES.findIndex(t=>t.id===saved);
+  if(f>=0)themeIdx=f;
+}catch(e){}
+function applyTheme(){
+  const t=THEMES[themeIdx];
+  if(t.id==='cockpit'){document.documentElement.removeAttribute('data-theme');}
+  else{document.documentElement.setAttribute('data-theme',t.id);}
+  document.getElementById('themeBtn').innerHTML='<span class="adot"></span>Theme: '+t.name;
+}
+applyTheme();
+document.getElementById('themeBtn').addEventListener('click',function(){
+  themeIdx=(themeIdx+1)%THEMES.length;
+  applyTheme();
+  try{localStorage.setItem(THEME_KEY,THEMES[themeIdx].id);}catch(e){}
+  this.classList.remove('pop');void this.offsetWidth;this.classList.add('pop');
 });
 
 /* ===== PROGRESS PERSISTENCE ===== */
@@ -835,6 +895,7 @@ function renderCh(){
     return `<div class="chal ${exp?'exp':''} ${done?'done':''}"><input type="checkbox" class="ck" data-k="${key}" ${done?'checked':''} aria-label="Mark ${c[0]} as complete"><div class="chal-main"><div class="obj"><span class="idx">${exp?'E':'N'}${i+1}</span><span class="otxt">${c[0]}</span></div><div class="tip">${c[1]}</div></div></div>`;
   }).join('');
   document.getElementById('chBody').innerHTML=html;
+  if(typeof updScroll==='function')updScroll();
 }
 renderCh();
 document.getElementById('chReset').addEventListener('click',()=>{
@@ -842,9 +903,39 @@ document.getElementById('chReset').addEventListener('click',()=>{
     PROG={};saveProg();
     document.querySelectorAll('.ck').forEach(c=>{c.checked=false;const card=c.closest('.chal');if(card)card.classList.remove('done');});
     renderCh();updateCounts();
+
+/* ===== SCROLL NAV ===== */
+function updScroll(){
+  const t=document.getElementById('toTop'), b=document.getElementById('toBottom');
+  if(!t||!b)return;
+  const y=window.scrollY||document.documentElement.scrollTop;
+  const max=document.documentElement.scrollHeight-window.innerHeight;
+  t.classList.toggle('hide',y<300);
+  b.classList.toggle('hide',max-y<300||max<600);
+}
+window.addEventListener('scroll',updScroll,{passive:true});
+window.addEventListener('resize',updScroll);
+document.getElementById('toTop').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+document.getElementById('toBottom').addEventListener('click',()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'smooth'}));
+updScroll();
   }
 });
 updateCounts();
+
+/* ===== SCROLL NAV ===== */
+function updScroll(){
+  const t=document.getElementById('toTop'), b=document.getElementById('toBottom');
+  if(!t||!b)return;
+  const y=window.scrollY||document.documentElement.scrollTop;
+  const max=document.documentElement.scrollHeight-window.innerHeight;
+  t.classList.toggle('hide',y<300);
+  b.classList.toggle('hide',max-y<300||max<600);
+}
+window.addEventListener('scroll',updScroll,{passive:true});
+window.addEventListener('resize',updScroll);
+document.getElementById('toTop').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+document.getElementById('toBottom').addEventListener('click',()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'smooth'}));
+updScroll();
 
 </script>
 </body>
