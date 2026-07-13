@@ -11,8 +11,19 @@
   --bg:#0a0f1e; --panel:#111a2e; --panel2:#0d1425; --line:#1e2b47;
   --ink:#e9eef8; --dim:#94a1bd; --hud:#5fe0c8; --hud-dim:#2a5b57;
   --amber:#f5b455; --rose:#f07a8e; --violet:#9f8fff; --green:#8fd987;
+  --edge:#233052; --halo:rgba(122,142,182,.35);
+  --on-hud:#08221e; --on-rose:#2b0d13; --on-hud-dim:#0a3a2e;
   --radius:10px;
 }
+html[data-theme="light"]{
+  --bg:#edf1f8; --panel:#ffffff; --panel2:#e4eaf4; --line:#c6d2e4;
+  --ink:#16223b; --dim:#57678a; --hud:#0c8f7c; --hud-dim:#8fcdc2;
+  --amber:#a86a00; --rose:#c23e5b; --violet:#6a55d8; --green:#2c8c4d;
+  --edge:#b7c4db; --halo:rgba(70,95,135,.45);
+  --on-hud:#ffffff; --on-rose:#ffffff; --on-hud-dim:#eafff8;
+}
+html[data-theme="light"] body{background-image:none}
+html[data-theme="light"] nav{background:rgba(237,241,248,.92)}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;line-height:1.55;
@@ -36,7 +47,7 @@ nav{position:sticky;top:0;z-index:50;background:rgba(10,15,30,.92);backdrop-filt
 .tab{flex:0 0 auto;background:none;border:1px solid var(--line);color:var(--dim);font-family:'Chakra Petch',sans-serif;
   font-size:.82rem;text-transform:uppercase;letter-spacing:.08em;padding:9px 16px;border-radius:6px;cursor:pointer;transition:all .15s}
 .tab:hover{color:var(--ink);border-color:var(--hud-dim)}
-.tab.on{color:#08221e;background:var(--hud);border-color:var(--hud);font-weight:700}
+.tab.on{color:var(--on-hud);background:var(--hud);border-color:var(--hud);font-weight:700}
 .tab:focus-visible{outline:2px solid var(--hud);outline-offset:2px}
 
 /* Sections */
@@ -68,9 +79,9 @@ section.on{display:block}
 .rbtn:focus-visible{outline:2px solid var(--hud);outline-offset:2px}
 .rbtn .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:1px}
 .rbtn.on{color:var(--ink);border-color:currentColor}
-.edge{stroke:#233052;stroke-width:2;fill:none;transition:all .25s}
+.edge{stroke:var(--edge);stroke-width:2;fill:none;transition:all .25s}
 .edge.hot{stroke-width:3.5;filter:drop-shadow(0 0 4px currentColor)}
-.node .halo{fill:rgba(0,0,0,0);stroke:rgba(122,142,182,.35);stroke-width:1.2;transition:all .25s}
+.node .halo{fill:rgba(0,0,0,0);stroke:var(--halo);stroke-width:1.2;transition:all .25s}
 .node.hot .halo{stroke-width:2.4;filter:drop-shadow(0 0 6px currentColor)}
 .node text{fill:var(--dim);font-family:'IBM Plex Mono',monospace;font-size:10.5px;transition:fill .25s}
 .node.hot text{fill:var(--ink)}
@@ -107,13 +118,13 @@ section.on{display:block}
 .pbtn{border:1px solid var(--line);background:var(--panel);color:var(--dim);font-family:'IBM Plex Mono',monospace;
   font-size:.74rem;padding:7px 11px;border-radius:6px;cursor:pointer;transition:all .15s}
 .pbtn:hover{color:var(--ink)}
-.pbtn.on{background:var(--hud);color:#08221e;border-color:var(--hud);font-weight:600}
+.pbtn.on{background:var(--hud);color:var(--on-hud);border-color:var(--hud);font-weight:600}
 .pbtn:focus-visible{outline:2px solid var(--hud);outline-offset:2px}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:16px}
 .seg button{background:var(--panel);border:none;color:var(--dim);font-family:'Chakra Petch',sans-serif;text-transform:uppercase;
   font-size:.8rem;letter-spacing:.06em;padding:10px 20px;cursor:pointer}
-.seg button.on.norm{background:var(--hud);color:#08221e;font-weight:700}
-.seg button.on.exp{background:var(--rose);color:#2b0d13;font-weight:700}
+.seg button.on.norm{background:var(--hud);color:var(--on-hud);font-weight:700}
+.seg button.on.exp{background:var(--rose);color:var(--on-rose);font-weight:700}
 .seg button:focus-visible{outline:2px solid var(--hud);outline-offset:-2px}
 .ch-title{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:12px}
 .ch-title h3{font-size:1.15rem;text-transform:uppercase}
@@ -132,21 +143,33 @@ section.on{display:block}
 .ck{appearance:none;-webkit-appearance:none;width:22px;height:22px;min-width:22px;border:1.5px solid var(--line);border-radius:6px;background:var(--panel2);cursor:pointer;margin-top:2px;position:relative;transition:all .15s}
 .ck:checked{background:var(--hud);border-color:var(--hud)}
 .chal.exp .ck:checked{background:var(--rose);border-color:var(--rose)}
-.ck:checked::after{content:"\2713";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#08221e;font-weight:700;font-size:.85rem}
-.chal.exp .ck:checked::after{color:#2b0d13}
+.ck:checked::after{content:"\2713";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--on-hud);font-weight:700;font-size:.85rem}
+.chal.exp .ck:checked::after{color:var(--on-rose)}
 .ck:focus-visible{outline:2px solid var(--hud);outline-offset:2px}
-.chal.done .obj{color:var(--dim);text-decoration:line-through;text-decoration-color:rgba(148,161,189,.55)}
+.chal.done .obj{color:var(--dim)}
+.otxt{position:relative}
+.otxt::after{content:"";position:absolute;left:0;top:58%;height:1.5px;width:0;background:var(--dim);transition:width .35s ease}
+.chal.done .otxt::after{width:100%}
+@keyframes ckpop{0%{transform:scale(1)}45%{transform:scale(1.3)}100%{transform:scale(1)}}
+.ck:checked{animation:ckpop .28s ease}
+@keyframes cardflash{0%{box-shadow:0 0 0 0 rgba(95,224,200,.55)}100%{box-shadow:0 0 0 14px rgba(95,224,200,0)}}
+@keyframes cardflashexp{0%{box-shadow:0 0 0 0 rgba(240,122,142,.55)}100%{box-shadow:0 0 0 14px rgba(240,122,142,0)}}
+.chal.justdone{animation:cardflash .55s ease}
+.chal.exp.justdone{animation:cardflashexp .55s ease}
+.pbtn .pc.full{color:var(--amber);font-weight:700}
+.progbar i.full{background:linear-gradient(90deg,var(--amber),#ffd98a)}
+#themeBtn{margin-left:auto}
 .prog{margin:0 0 16px}
 .progbar{height:8px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;overflow:hidden}
 .progbar i{display:block;height:100%;background:linear-gradient(90deg,var(--hud),var(--green));width:0;transition:width .3s}
 .progmeta{display:flex;justify-content:space-between;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--dim);margin-top:8px;flex-wrap:wrap}
 .pbtn .pc{color:var(--green);margin-left:6px}
-.pbtn.on .pc{color:#0a3a2e}
+.pbtn.on .pc{color:var(--on-hud-dim)}
 .medaltrack{display:flex;gap:18px;flex-wrap:wrap;margin-top:6px}
 .medaltrack label{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--dim);cursor:pointer}
 .medaltrack .ck{margin-top:0}
 .medaltrack label.exp .ck:checked{background:var(--rose);border-color:var(--rose)}
-.medaltrack label.exp .ck:checked::after{color:#2b0d13}
+.medaltrack label.exp .ck:checked::after{color:var(--on-rose)}
 
 footer{border-top:1px solid var(--line);padding:22px 0 40px;color:var(--dim);font-size:.78rem}
 footer .mono{color:var(--hud-dim)}
@@ -169,7 +192,7 @@ footer .mono{color:var(--hud-dim)}
     <div class="eyebrow">Cornerian Defence Force // Mission Intelligence</div>
     <h1>Lylat <span>Briefing</span> Room</h1>
     <p class="sub">Maximum-score strategies, best routes and full Challenge Mode tactics for Star Fox on Nintendo Switch 2 (2026). Every stage, every medal target, all 192 challenges.</p>
-    <span class="patch mono">DATA CURRENT AS OF 1 JULY 2026 · GAME v1.1.0</span>
+    <span class="patch mono">DATA CURRENT AS OF 13 JULY 2026 · GAME v1.1.0 (LATEST)</span>
   </div>
 </header>
 
@@ -178,6 +201,7 @@ footer .mono{color:var(--hud-dim)}
   <button class="tab" data-sec="routes" role="tab">Routes</button>
   <button class="tab" data-sec="stages" role="tab">Stages &amp; Scoring</button>
   <button class="tab" data-sec="challenges" role="tab">Challenges</button>
+  <button class="tab" id="themeBtn" aria-label="Switch between dark and light themes">◐ Theme</button>
 </div></div></nav>
 
 <main class="wrap">
@@ -203,8 +227,12 @@ footer .mono{color:var(--hud-dim)}
       <p>Starting a hard stage with no bombs? Dying immediately at the start respawns you with three. Worth it on Venom 1. <b>Never do this on Expert</b>, where running out of lives is a hard game over for the whole run.</p></div>
     <div class="card"><h3>Lock-on control</h3>
       <p>Locked onto the wrong target when a juicy cluster appears? Hold <b>L + R together</b> to cancel the lock before firing, then re-charge over the group. Precision lock discipline is also how you avoid friendly-fire hits on challenges that forbid clipping teammates.</p></div>
+    <div class="card"><h3>Patch watch: v1.1.0 changes that affect scoring</h3>
+      <p>The launch day patch removed the classic Meteo trick where a charged shot on a <b>Flip Bot</b> paid bonus hits from its explosion, so do not budget hits for it as N64 veterans might. It also fixed the exploits where boosting past the Meteo and Solar bosses broke the stage, and the life-loss bug when quitting after a checkpoint restart. Easy difficulty (added in this patch) gives a sturdier ship and stronger laser but <b>never awards medals</b>. No further patch has shipped as of 13 July 2026.</p></div>
+    <div class="card"><h3>amiibo bonuses</h3>
+      <p>Three compatible Star Fox amiibo unlock <b>12 Battle Banner elements</b> in total: three backgrounds and nine emblems. These are cosmetic only, so nothing scoring-related is locked behind them.</p></div>
     <div class="card"><h3>Unlock chain</h3>
-      <p>All 15 Normal medals unlock <b>Expert difficulty</b> (plus James McCloud sunglasses for Fox). All 16 Expert medals, including Venom 2, unlock an alternate title screen, an extra multiplayer mode and 100% recognition. Challenge Mode completions feed Character Avatars, AR accessories and Battle Banner cosmetics.</p></div>
+      <p>All 15 Normal medals unlock <b>Expert difficulty</b> (plus James McCloud sunglasses for Fox). All 16 Expert medals, including Venom 2, unlock an alternate title screen, an extra multiplayer mode and 100% recognition. Challenge Mode completions feed Character Avatars, AR accessories, Battle Banner cosmetics and Holoviewer intel logs on characters and locations.</p></div>
   </div>
 </section>
 
@@ -246,7 +274,7 @@ footer .mono{color:var(--hud-dim)}
 </main>
 
 <footer><div class="wrap">
-  <p>Fan-made strategy reference for Star Fox (Nintendo Switch 2, Velan Studios / Nintendo, released 25 June 2026). Compiled from post-launch community guides and testing current to 1 July 2026; verify exact figures in game, as patches may adjust values. Not affiliated with Nintendo.</p>
+  <p>Fan-made strategy reference for Star Fox (Nintendo Switch 2, Velan Studios / Nintendo, released 25 June 2026). Compiled from post-launch community guides, official patch notes and testing current to 13 July 2026; verify exact figures in game, as patches may adjust values. Not affiliated with Nintendo.</p>
   <p class="mono" style="margin-top:8px">// GOOD LUCK, AND DO A BARREL ROLL</p>
 </div></footer>
 
@@ -328,7 +356,7 @@ const STAGES = [
  {id:"meteo",n:2,name:"Meteo",veh:"Arwing",medal:200,pace:"~90 hits at the checkpoint",
   arrive:"Default exit from Corneria.",
   exits:[["Fichina","Default exit."],["Katina (warp)","Fly through all seven energy anomalies."]],
-  strat:["Asteroids count as hits: shoot rocks continuously between fighter waves.","The back half is where the score lives; the warp rings lead into an extremely dense field that can carry you most of the way to 200 alone.","Charge shot the mirrored butterfly-ship pairs by aiming between them.","If you take the warp for the Katina shortcut, keep firing inside the channel; the large asteroids there are nearly free hits."]},
+  strat:["Asteroids count as hits: shoot rocks continuously between fighter waves.","The back half is where the score lives; the warp rings lead into an extremely dense field that can carry you most of the way to 200 alone.","Charge shot the mirrored butterfly-ship pairs by aiming between them. Note that the old N64 Flip Bot charged-shot bonus was patched out in v1.1.0, so it no longer pays extra hits.","If you take the warp for the Katina shortcut, keep firing inside the channel; the large asteroids there are nearly free hits."]},
  {id:"sectory",n:3,name:"Sector Y",veh:"Arwing",medal:150,pace:"~50 hits at the checkpoint",
   arrive:"Corneria's alternative exit.",
   exits:[["Katina","Default exit."],["Aquas","Finish with 100+ hits."]],
@@ -616,7 +644,7 @@ expert:[
 };
 
 /* ===== TAB NAV ===== */
-const tabs=document.querySelectorAll('.tab');
+const tabs=document.querySelectorAll('.tab[data-sec]');
 tabs.forEach(t=>t.addEventListener('click',()=>{
   tabs.forEach(x=>x.classList.remove('on'));t.classList.add('on');
   document.querySelectorAll('main section').forEach(s=>s.classList.remove('on'));
@@ -709,6 +737,18 @@ buildMap();showRoute(ROUTES[3]);
 
 document.getElementById('branchList').innerHTML=BRANCHES.map(([k,v])=>`<li><b>${k}:</b> ${v}</li>`).join('');
 
+/* ===== THEME ===== */
+const THEME_KEY='sf2-theme';
+function applyTheme(t){document.documentElement.setAttribute('data-theme',t);}
+let theme='dark';
+try{theme=localStorage.getItem(THEME_KEY)||'dark';}catch(e){}
+applyTheme(theme);
+document.getElementById('themeBtn').addEventListener('click',()=>{
+  theme=(theme==='dark')?'light':'dark';
+  applyTheme(theme);
+  try{localStorage.setItem(THEME_KEY,theme);}catch(e){}
+});
+
 /* ===== PROGRESS PERSISTENCE ===== */
 const STORE_KEY='sf2-lylat-progress-v1';
 let PROG={};
@@ -719,19 +759,25 @@ function countStage(sid){let d=0;['normal','expert'].forEach(df=>CH[sid][df].for
 function updateCounts(){
   let t=0,m=0;for(const k in PROG){if(k.indexOf('c.')===0)t++;if(k.indexOf('m.')===0)m++;}
   const tot=document.getElementById('chTotal');if(tot)tot.textContent=t+' / 192 COMPLETE';
-  const bar=document.getElementById('chBarFill');if(bar)bar.style.width=(t/192*100).toFixed(1)+'%';
+  const bar=document.getElementById('chBarFill');if(bar){bar.style.width=(t/192*100).toFixed(1)+'%';bar.classList.toggle('full',t===192);}
   const mc=document.getElementById('medalCount');if(mc)mc.textContent=m+' / 32 MEDALS TRACKED';
   document.querySelectorAll('#chPicker .pbtn[data-s]').forEach(b=>{
     let pc=b.querySelector('.pc');
     if(!pc){pc=document.createElement('span');pc.className='pc';b.appendChild(pc);}
-    pc.textContent=countStage(b.dataset.s)+'/12';
+    const c=countStage(b.dataset.s);
+    pc.textContent=c+'/12';
+    pc.classList.toggle('full',c===12);
   });
 }
 document.addEventListener('change',e=>{
   const el=e.target;
   if(el&&el.classList&&el.classList.contains('ck')){
     setProg(el.dataset.k,el.checked);
-    const card=el.closest('.chal');if(card)card.classList.toggle('done',el.checked);
+    const card=el.closest('.chal');
+    if(card){
+      card.classList.toggle('done',el.checked);
+      if(el.checked){card.classList.add('justdone');setTimeout(()=>card.classList.remove('justdone'),600);}
+    }
   }
 });
 
@@ -786,7 +832,7 @@ function renderCh(){
   html+=list.map((c,i)=>{
     const key='c.'+chStage+'.'+chDiff+'.'+i;
     const done=!!PROG[key];
-    return `<div class="chal ${exp?'exp':''} ${done?'done':''}"><input type="checkbox" class="ck" data-k="${key}" ${done?'checked':''} aria-label="Mark ${c[0]} as complete"><div class="chal-main"><div class="obj"><span class="idx">${exp?'E':'N'}${i+1}</span>${c[0]}</div><div class="tip">${c[1]}</div></div></div>`;
+    return `<div class="chal ${exp?'exp':''} ${done?'done':''}"><input type="checkbox" class="ck" data-k="${key}" ${done?'checked':''} aria-label="Mark ${c[0]} as complete"><div class="chal-main"><div class="obj"><span class="idx">${exp?'E':'N'}${i+1}</span><span class="otxt">${c[0]}</span></div><div class="tip">${c[1]}</div></div></div>`;
   }).join('');
   document.getElementById('chBody').innerHTML=html;
 }
